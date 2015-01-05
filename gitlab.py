@@ -2,8 +2,8 @@
 from urllib2 import urlopen
 from urllib import urlencode
 
-PRIVATE_TOKEN = 'your token'
-URL = 'https://git.corp.sethq.com/api/v3/'
+PRIVATE_TOKEN = 'your private_token'
+URL = 'your gitlab url ' # should be ended by /api/v3
 
 
 def projects(archived='true', order_by='id', sort='asc'):
