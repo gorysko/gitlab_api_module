@@ -64,6 +64,3 @@ def _check_type(item):
     if type(item) == int:
         return str(item)
     return item
-
-if __name__ == '__main__':
-    print get_project(141)
