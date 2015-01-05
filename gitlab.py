@@ -6,7 +6,6 @@ from urllib2 import urlopen
 PRIVATE_TOKEN = 'your private_token'
 URL = 'your gitlab url ' # should be ended by /api/v3
 
-
 def projects(archived='true', order_by='id', sort='asc'):
     """Gets projects data as dict"""
     url = URL + 'projects?'
@@ -35,6 +34,16 @@ def get_events(project_id):
     """Get project events by project_id"""
     project_id = _check_type(project_id)
     url = URL + 'projects/' + project_id + '/' + 'events?'
+    query = {'private_token': PRIVATE_TOKEN}
+    post_query = urlencode(query)
+    response = urlopen(url + post_query)
+    return _return_result(response)
+
+
+def get_mambers(project_id):
+    """gets project members by project_id"""
+    project_id = _check_type(project_id)
+    url = URL + 'projects/' + project_id + '/' + 'members?'
     query = {'private_token': PRIVATE_TOKEN}
     post_query = urlencode(query)
     response = urlopen(url + post_query)
