@@ -2,6 +2,7 @@
 from urllib import urlencode
 from urllib2 import urlopen
 
+
 PRIVATE_TOKEN = 'your private_token'
 URL = 'your gitlab url ' # should be ended by /api/v3
 
@@ -72,6 +73,3 @@ def _check_type(item):
     if type(item) == int:
         return str(item)
     return item
-
-if __name__ == '__main__':
-    print get_events(141)
