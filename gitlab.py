@@ -106,6 +106,19 @@ class GitlabApi(object):
             response = urlopen(url + post_query)
             return self._return_result(response)
 
+    def get_commit(self, project_id, commit_sha):
+        """Gets commit info."""
+        project_id = self._check_type(project_id)
+
+        url = self._url + 'projects/' + project_id + \
+                '/repository/commits/' + commit_sha + ?
+
+        query = {'private_token': self._private_token}
+        post_query = urlencode(query)
+
+        response = urlopen(url + post_query)
+        return self._return_result(response)
+
     def get_events(self, project_id):
         """Get project events by project_id"""
         project_id = self._check_type(project_id)
@@ -163,7 +176,3 @@ class GitlabApi(object):
         if type(item) == int:
             return str(item)
         return item
-
-if __name__ == '__main__':
-    api = GitlabApi('jfLJysTvzDJEFspmX1xJ', 'https://git.corp.sethq.com/api/v3/')
-    print api.get_project_info(5, 3)
