@@ -76,13 +76,13 @@ class GitlabApi(object):
         response = urlopen(url + post_query)
         return self._return_result(response)
 
-    def get_repo_info(self, project_id, info=0):
+    def get_project_info(self, project_id, info=0):
         """Gets repos of the project
         Args:
            project_id: id of the project
            info: info type which you wnat to obtaine
         """
-        if info in (0, 1, 2, 3):
+        if info in (0, 1, 2, 4):
             project_id = self._check_type(project_id)
             end =  '/repository/tree/?'
 
@@ -90,10 +90,13 @@ class GitlabApi(object):
                 end =  '/repository/tags/?'
 
             if info == 2:
-                end = '/repository/contributors?'
+                end = '/repository/contributors/?'
 
             if info == 3:
-                 end = '/repository/files?'
+                 end = '/repository/files/?'
+
+            if info == 4:
+                end = '/repository/commits/?'
 
             url = self._url + 'projects/' + project_id + end
 
@@ -160,3 +163,7 @@ class GitlabApi(object):
         if type(item) == int:
             return str(item)
         return item
+
+if __name__ == '__main__':
+    api = GitlabApi('jfLJysTvzDJEFspmX1xJ', 'https://git.corp.sethq.com/api/v3/')
+    print api.get_project_info(5, 3)
