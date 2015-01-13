@@ -2,71 +2,84 @@
 from urllib import urlencode
 from urllib2 import urlopen
 
+class GitlabApi(object):
+    """gitlab api class """
 
-PRIVATE_TOKEN = 'your private_token'
-URL = 'your gitlab url ' # should be ended by /api/v3
-
-def projects(archived='true', order_by='id', sort='asc'):
-    """Gets projects data as dict"""
-    url = URL + 'projects?'
-
-    query = {'private_token': PRIVATE_TOKEN,
-             'archived': archived,
-             'order_by': order_by,
-             'sort': sort}
-
-    post_query = urlencode(query)
-    response = urlopen(url + post_query)
-    return _return_result(response)
+    def __init__(self, private_token, url):
+        """
+        Args:
+            private_token: gitlab private token, as string
+            url = gitlab api url, should be ended by '/api/v3/'
+        """
+        self._private_token = private_token
+        self._url = url
 
 
-def get_project(project_id):
-    """Gets project by project id"""
-    project_id = _check_type(project_id)
-    url = URL + 'projects/' + project_id + '?'
-    query = {'private_token': PRIVATE_TOKEN}
-    post_query = urlencode(query)
+    def get_projects(self, archived='true', order_by='id', sort='asc'):
+        """Gets projects data as dict"""
+        url = self._url + 'projects?'
 
-    response = urlopen(url + post_query)
-    return _return_result(response)
+        query = {'private_token': self._private_token,
+                 'archived': archived,
+                 'order_by': order_by,
+                 'sort': sort}
 
-def get_events(project_id):
-    """Get project events by project_id"""
-    project_id = _check_type(project_id)
-    url = URL + 'projects/' + project_id + '/' + 'events?'
-    query = {'private_token': PRIVATE_TOKEN}
-    post_query = urlencode(query)
-    response = urlopen(url + post_query)
-    return _return_result(response)
+        post_query = urlencode(query)
+        response = urlopen(url + post_query)
+        return _return_result(response)
 
 
-def get_mambers(project_id):
-    """gets project members by project_id"""
-    project_id = _check_type(project_id)
-    url = URL + 'projects/' + project_id + '/' + 'members?'
-    query = {'private_token': PRIVATE_TOKEN}
-    post_query = urlencode(query)
-    response = urlopen(url + post_query)
-    return _return_result(response)
+    def get_project(self, project_id):
+        """Gets project by project id"""
+        project_id = _check_type(project_id)
 
-def users():
-    """Gets list of users"""
-    response = urlopen(URL + 'users?' + PRIVATE_TOKEN)
-    return _return_result(response)
+        url = self._url + 'projects/' + project_id + '?'
+        query = {'private_token': self._private_token}
+        post_query = urlencode(query)
+
+        response = urlopen(url + post_query)
+        return _return_result(response)
 
 
-def get_user(user_id):
-    """Gets user by it's id"""
-    user_id = _check_type(user_id)
-    response = urlopen(URL + 'users/' + user_id + '?' + PRIVATE_TOKEN)
-    return _return_result(response)
+    def get_events(self, project_id):
+        """Get project events by project_id"""
+        project_id = _check_type(project_id)
+        url = URL + 'projects/' + project_id + '/' + 'events?'
+        query = {'private_token': self._private_token}
+        post_query = urlencode(query)
+        response = urlopen(url + post_query)
+        return _return_result(response)
 
 
-def get_user_keys(user_id):
-    """Gets user ssh keys"""
-    user_id = _check_type(user_id)
-    response = urlopen(URL + 'users/' + user_id + '/keys' + '?' + PRIVATE_TOKEN)
-    return _return_result(response)
+    def get_members(self, project_id):
+        """gets project members by project_id"""
+        project_id = _check_type(project_id)
+        url = self._url + 'projects/' + project_id + '/' + 'members?'
+        query = {'private_token': self._private_token}
+        post_query = urlencode(query)
+        response = urlopen(url + post_query)
+        return _return_result(response)
+
+    def users(self):
+        """Gets list of users"""
+        response = urlopen(self._url + 'users?' + self._private_token)
+        return _return_result(response)
+
+
+    def get_user(self, user_id):
+        """Gets user by it's id"""
+        user_id = _check_type(user_id)
+        response = urlopen(self._url + 'users/' + user_id + '?' + \
+                           self._private_token)
+        return _return_result(response)
+
+
+    def get_user_keys(self, user_id):
+        """Gets user ssh keys"""
+        user_id = _check_type(user_id)
+        response = urlopen(self._url + 'users/' + user_id + '/keys' + '?' + \
+                           self._private_token)
+        return _return_result(response)
 
 
 def _return_result(response):
@@ -74,11 +87,11 @@ def _return_result(response):
     result = response.read()
     if result is not None:
         return result
-    return None
+        return None
 
 
 def _check_type(item):
     """Checks and casts type of item"""
     if type(item) == int:
         return str(item)
-    return item
+        return item
