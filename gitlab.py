@@ -4,6 +4,7 @@
 # http://doc.gitlab.com/ce/api/README.html
 
 """Gitlab api module"""
+from json import loads
 from urllib import urlencode
 from urllib2 import urlopen
 
@@ -45,6 +46,15 @@ class GitlabApi(object):
         response = urlopen(url + post_query)
         return self._return_result(response)
 
+    def get_snippets(self, project_id):
+        """Gets project snippets """
+        project_id = self._check_type(project_id)
+
+        url = self._url + 'projects/' + project_id + '/snippets/'
+        query = {'private_token': self._private_token}
+        post_query = urlencode(query)
+        response = urlopen(url + post_query)
+        return self._return_result(response)
 
     def get_events(self, project_id):
         """Get project events by project_id"""
@@ -90,7 +100,9 @@ class GitlabApi(object):
     def _return_result(response):
         """Reads and checks response"""
         if response is not None:
-            return  response.read()
+            result = response.read()
+            if result is not None:
+                return loads(result)
         return None
 
 
