@@ -76,6 +76,27 @@ class GitlabApi(object):
         response = urlopen(url + post_query)
         return self._return_result(response)
 
+    def get_repo_info(self, project_id, info=0):
+        """Gets repos of the project"""
+        if info in (0, 1, 2):
+            project_id = self._check_type(project_id)
+            end =  '/repository/tree/?'
+
+            if info == 1:
+                end =  '/repository/tags/?'
+
+            if info == 2:
+                end = '/repository/contributors/?'
+
+            url = self._url + 'projects/' + project_id + end
+
+            query = {'private_token': self._private_token}
+            post_query = urlencode(query)
+
+            response = urlopen(url + post_query)
+            return self._return_result(response)
+
+
     def get_events(self, project_id):
         """Get project events by project_id"""
         project_id = self._check_type(project_id)
@@ -86,7 +107,6 @@ class GitlabApi(object):
 
         response = urlopen(url + post_query)
         return self._return_result(response)
-
 
     def get_members(self, project_id):
         """gets project members by project_id"""
