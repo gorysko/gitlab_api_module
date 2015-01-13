@@ -36,7 +36,7 @@ class GitlabApi(object):
     def get_projects_ids(self):
         """Gets all project ids"""
         projects = self.get_projects()
-        return [project['id'] for project in projects]
+        return [item['id'] for item in projects]
 
     def get_project(self, project_id):
         """Gets project by project id"""
@@ -49,22 +49,41 @@ class GitlabApi(object):
         response = urlopen(url + post_query)
         return self._return_result(response)
 
-    def get_snippets(self, project_id):
+    def get_project_snippets(self, project_id):
         """Gets project snippets """
         project_id = self._check_type(project_id)
 
         url = self._url + 'projects/' + project_id + '/snippets/?'
         query = {'private_token': self._private_token}
         post_query = urlencode(query)
+
+        response = urlopen(url + post_query)
+        return self._return_result(response)
+
+    def get_project_snippet(self, project_id, snippet_id, raw=False):
+        """Gets project snippet by id"""
+        project_id = self._check_type(project_id)
+        snippet_id = self._check_type(snippet_id)
+
+        url = self._url + 'projects/' + project_id + '/snippets/' + \
+              snippet_id + '?'
+        if raw:
+            url = url[:-1] + 'raw' +'?'
+
+        query = {'private_token': self._private_token}
+        post_query = urlencode(query)
+
         response = urlopen(url + post_query)
         return self._return_result(response)
 
     def get_events(self, project_id):
         """Get project events by project_id"""
         project_id = self._check_type(project_id)
+
         url = self._url + 'projects/' + project_id + '/' + 'events?'
         query = {'private_token': self._private_token}
         post_query = urlencode(query)
+
         response = urlopen(url + post_query)
         return self._return_result(response)
 
@@ -72,9 +91,11 @@ class GitlabApi(object):
     def get_members(self, project_id):
         """gets project members by project_id"""
         project_id = self._check_type(project_id)
+
         url = self._url + 'projects/' + project_id + '/' + 'members?'
         query = {'private_token': self._private_token}
         post_query = urlencode(query)
+
         response = urlopen(url + post_query)
         return self._return_result(response)
 
@@ -93,6 +114,7 @@ class GitlabApi(object):
     def get_user_keys(self, user_id):
         """Gets user ssh keys"""
         user_id = self._check_type(user_id)
+
         response = urlopen(self._url + 'users/' + user_id + '/keys' + '?' + \
                            self._private_token)
         return self._return_result(response)
