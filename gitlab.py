@@ -1,3 +1,8 @@
+#! /usr/bin/env python
+
+# gitlab api docs could be found here
+# http://doc.gitlab.com/ce/api/README.html
+
 """Gitlab api module"""
 from urllib import urlencode
 from urllib2 import urlopen
