@@ -20,7 +20,6 @@ class GitlabApi(object):
         self._private_token = private_token
         self._url = url
 
-
     def get_projects(self, archived='true', order_by='id', sort='asc'):
         """Gets projects data as dict"""
         url = self._url + 'projects?'
@@ -34,6 +33,10 @@ class GitlabApi(object):
         response = urlopen(url + post_query)
         return self._return_result(response)
 
+    def get_projects_ids(self):
+        """Gets all project ids"""
+        projects = self.get_projects()
+        return [project['id'] for project in projects]
 
     def get_project(self, project_id):
         """Gets project by project id"""
@@ -50,7 +53,7 @@ class GitlabApi(object):
         """Gets project snippets """
         project_id = self._check_type(project_id)
 
-        url = self._url + 'projects/' + project_id + '/snippets/'
+        url = self._url + 'projects/' + project_id + '/snippets/?'
         query = {'private_token': self._private_token}
         post_query = urlencode(query)
         response = urlopen(url + post_query)
@@ -80,14 +83,12 @@ class GitlabApi(object):
         response = urlopen(self._url + 'users?' + self._private_token)
         return self._return_result(response)
 
-
     def get_user(self, user_id):
         """Gets user by it's id"""
         user_id = self._check_type(user_id)
         response = urlopen(self._url + 'users/' + user_id + '?' + \
                            self._private_token)
         return self._return_result(response)
-
 
     def get_user_keys(self, user_id):
         """Gets user ssh keys"""
@@ -104,7 +105,6 @@ class GitlabApi(object):
             if result is not None:
                 return loads(result)
         return None
-
 
     @staticmethod
     def _check_type(item):
