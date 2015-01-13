@@ -4,6 +4,7 @@
 # http://doc.gitlab.com/ce/api/README.html
 
 """Gitlab api module"""
+
 from json import loads
 from urllib import urlencode
 from urllib2 import urlopen
@@ -84,19 +85,14 @@ class GitlabApi(object):
         """
         if info in (0, 1, 2, 4):
             project_id = self._check_type(project_id)
-            end =  '/repository/tree/?'
+            end = '/repository/tree/?'
 
-            if info == 1:
-                end =  '/repository/tags/?'
+            keys = {1: '/repository/tags/?',
+                    2: '/repository/contributors/?',
+                    3: '/repository/files/?',
+                    4: '/repository/commits/?'}
 
-            if info == 2:
-                end = '/repository/contributors/?'
-
-            if info == 3:
-                 end = '/repository/files/?'
-
-            if info == 4:
-                end = '/repository/commits/?'
+            end = keys[info]
 
             url = self._url + 'projects/' + project_id + end
 
@@ -110,8 +106,8 @@ class GitlabApi(object):
         """Gets commit info."""
         project_id = self._check_type(project_id)
 
-        url = self._url + 'projects/' + project_id + \
-                '/repository/commits/' + commit_sha + ?
+        url = self._url + 'projects/' + project_id \
+              + '/repository/commits/' + commit_sha + '?'
 
         query = {'private_token': self._private_token}
         post_query = urlencode(query)
