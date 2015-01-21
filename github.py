@@ -164,3 +164,18 @@ class GithubApi(object):
 
         response = urlopen(url)
         return return_result(response)
+
+    def get_repo_info(self, repo, info='contributors'):
+        """Gets repository contributors by repo id.
+
+        Args:
+            repo: repository id , as int.
+        """
+        if info in ('contributors', 'languages', 'tags', 'branches'):
+            repo_id = check_type(repo)
+            url = self._url + 'repos/' + self._user + '/' + \
+                  repo_id + '/' + info
+
+            response = urlopen(url)
+            return return_result(response)
+        return None
