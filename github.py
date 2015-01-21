@@ -135,3 +135,11 @@ class GithubApi(object):
 
         response = urlopen(url)
         return return_result(response)
+
+    def get_repos(self):
+        """Gets user repos."""
+
+        url = self._url + 'users/' + self._user + '/repos/'
+
+        response = urlopen(url)
+        return return_result(result)
