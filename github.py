@@ -36,7 +36,7 @@ class GithubApi(object):
         """
         org_id = check_type(org)
 
-        url = self._url + 'users/' + self._user + '/orgs/' + org_id
+        url = self._url + 'orgs/' + org_id
         response = urlopen(url)
         return return_result(response)
 
@@ -48,8 +48,7 @@ class GithubApi(object):
         """
         org_id = check_type(org)
 
-        url = self._url + 'users/' + self._user + '/orgs/' + \
-              org_id + '/members/'
+        url = self._url + 'orgs/' +  org_id + '/members/'
         response = urlopen(url)
         return return_result(response)
 
@@ -97,8 +96,7 @@ class GithubApi(object):
         org_id = check_type(org)
         team_id = check_type(team)
 
-        url = self._url + 'users/' + self._user + '/orgs/' + \
-              org_id + '/teams/' + team_id
+        url = self._url + 'orgs/' + org_id + '/teams/' + team_id
 
         response = urlopen(url)
         return return_response
@@ -114,8 +112,7 @@ class GithubApi(object):
         org_id = check_type(org)
         team_id = check_type(team)
 
-        url = self._url + 'users/' + self._user + '/orgs/' + \
-              org_id + '/teams/' + team_id + '/members/'
+        url = self._url + 'orgs/' + org_id + '/teams/' + team_id + '/members/'
 
         response = urlopen(url)
         return return_result(response)
@@ -130,16 +127,23 @@ class GithubApi(object):
         org_id = check_type(org)
         team_id = check_type(team)
 
-        url = self._url + 'users/' + self._user + '/orgs/' + \
-              org_id + '/teams/' + team_id + '/repos/'
+        url = self._url + 'orgs/' + org_id + '/teams/' + team_id + '/repos/'
 
         response = urlopen(url)
         return return_result(response)
 
-    def get_repos(self):
+    def get_user_repos(self):
         """Gets user repos."""
 
         url = self._url + 'users/' + self._user + '/repos/'
 
         response = urlopen(url)
         return return_result(result)
+
+    def get_org_repos(self, org):
+        """Gets org repos.
+
+        Args:
+            org: organization id, as int.
+        """
+        org_id = check_type(org)
