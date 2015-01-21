@@ -8,11 +8,12 @@
 from urllib import urlopen
 
 from utils import return_result
+from utils import check_type
 
 class GithubApi(object):
     """github api class."""
 
-    def __init__(self, url, user)
+    def __init__(self, url, user):
         """
         Args:
             user: user name, as string
@@ -23,7 +24,7 @@ class GithubApi(object):
 
     def get_orgs(self):
         """Gets user organiztions."""
-        url = self._url + 'users/' + user + '/orgs'
+        url = self._url + 'users/' + self._user + '/orgs'
         response = urlopen(url)
         return return_result(response)
 
@@ -35,6 +36,19 @@ class GithubApi(object):
         """
         org_id = check_type(org)
 
-        url = self._url + 'users/' + user + '/orgs/' + org_id
+        url = self._url + 'users/' + self._user + '/orgs/' + org_id
+        response = urlopen(url)
+        return return_result(response)
+
+    def get_org_members(self, org):
+        """Get organization members.
+
+        Args
+           org: user organization id,  as int.
+        """
+        org_id = check_type(org)
+
+        url = self._url + 'users/' + self._user + '/orgs/' + \
+              org_id + '/members/'
         response = urlopen(url)
         return return_result(response)
