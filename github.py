@@ -147,3 +147,20 @@ class GithubApi(object):
             org: organization id, as int.
         """
         org_id = check_type(org)
+        url = self._url + 'org/' + org_id + '/repos/'
+
+        response = urlopen(url)
+        return return_result(reposonse)
+
+    def get_repo(self, repo):
+        """Gets repository by it's id.
+
+        Args:
+            repo: repositiory id, as int.
+        """
+        repo_id = check_type(repo)
+
+        url = self._url + 'repos/' + self._user + '/' + repo_id
+
+        response = urlopen(url)
+        return return_result(response)
