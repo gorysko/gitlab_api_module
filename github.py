@@ -52,3 +52,17 @@ class GithubApi(object):
               org_id + '/members/'
         response = urlopen(url)
         return return_result(response)
+
+
+    def get_public_members(self, org):
+        """Gets public members of the organization.
+        Args:
+            org: user organiztion id, as int.
+        """
+        org_id = check_type(org)
+
+        url = self._url + 'users/' + self._user + '/orgs/' + \
+              org_id + '/public_members/'
+
+        response = urlopen(url)
+        return return_response(response)
