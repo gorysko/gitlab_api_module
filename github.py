@@ -156,11 +156,9 @@ class GithubApi(object):
         """Gets repository by it's id.
 
         Args:
-            repo: repositiory id, as int.
+            repo: repositiory name, as string
         """
-        repo_id = check_type(repo)
-
-        url = self._url + 'repos/' + self._user + '/' + repo_id
+        url = self._url + 'repos/' + self._user + '/' + repo
 
         response = urlopen(url)
         return return_result(response)
@@ -169,13 +167,23 @@ class GithubApi(object):
         """Gets repository contributors by repo id.
 
         Args:
-            repo: repository id , as int.
+            repo: repository name , as string.
         """
         if info in ('contributors', 'languages', 'tags', 'branches'):
-            repo_id = check_type(repo)
-            url = self._url + 'repos/' + self._user + '/' + \
-                  repo_id + '/' + info
+            url = self._url + 'repos/' + self._user + '/' + repo + '/' + info
 
             response = urlopen(url)
             return return_result(response)
         return None
+
+    def get_repo_branch(self, repo, branch):
+        """Gets repo branch by branch id.
+
+        Args:
+            repo: repo name , as string.
+            branch: branch name, as string.
+        """
+        url = self._url + 'repos/' + self._user + '/' + repo + '/' + branch
+
+        response = urlopen(url)
+        return return_result(response)
