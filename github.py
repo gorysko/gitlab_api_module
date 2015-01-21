@@ -197,3 +197,5 @@ class GithubApi(object):
         """
         url = self._url + 'repos/' + self._user + '/' + repo + '/' + \
               'collaborators'
+        response = urlopen(url)
+        return return_result(response)
