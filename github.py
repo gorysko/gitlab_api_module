@@ -169,7 +169,8 @@ class GithubApi(object):
         Args:
             repo: repository name , as string.
         """
-        if info in ('contributors', 'languages', 'tags', 'branches'):
+        if info in ('contributors', 'languages', 'tags',
+                    'branches', 'collaborators'):
             url = self._url + 'repos/' + self._user + '/' + repo + '/' + info
 
             response = urlopen(url)
@@ -187,3 +188,12 @@ class GithubApi(object):
 
         response = urlopen(url)
         return return_result(response)
+
+    def get_repo_collaborator(self, repo):
+        """Gets repo collaborator.
+
+        Args:
+            repo: repo name, as string.
+        """
+        url = self._url + 'repos/' + self._user + '/' + repo + '/' + \
+              'collaborators'
