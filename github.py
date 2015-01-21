@@ -66,3 +66,39 @@ class GithubApi(object):
 
         response = urlopen(url)
         return return_response(response)
+
+    def get_orgs_membership(self):
+        """Gets lists of user membership in organizations."""
+
+        url = self._url + 'users/' + self._user + '/memberships/orgs'
+
+        response = urlopen(url)
+        return return_result(response)
+
+    def get_teams(self, org):
+        """Gets list of teams.
+        Args:
+            org: organization id, as int.
+        """
+        org_id = check_type(org)
+
+        url = self._url + 'users/' + self._user + '/orgs/' + org_id + '/teams/'
+
+        response = urlopen(url)
+        return return_result(response)
+
+    def get_team(self, org, team):
+        """Gets team by id.
+
+        Args:
+            org: organization id , as int
+            team: team id in organization, as int.
+        """
+        org_id = check_type(org)
+        team_id = check_type(team)
+
+        url = self._url + 'users/' + self._user + '/orgs/' + \
+              org_id + '/teams/' + team_id
+
+        response = urlopen(url)
+        return return_response
