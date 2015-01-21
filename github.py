@@ -102,3 +102,36 @@ class GithubApi(object):
 
         response = urlopen(url)
         return return_response
+
+    def get_team_members(self, org, team):
+        """Gets team members.
+
+        Args:
+            org: organization id, as int
+            team: team id in orgznization , as int
+        """
+
+        org_id = check_type(org)
+        team_id = check_type(team)
+
+        url = self._url + 'users/' + self._user + '/orgs/' + \
+              org_id + '/teams/' + team_id + '/members/'
+
+        response = urlopen(url)
+        return return_result(response)
+
+    def get_team_repos(self, org, team):
+        """Gets team repos in organization.
+
+        Args:
+            org: organization id, as int
+            team: team id in organizatin, as int
+        """
+        org_id = check_type(org)
+        team_id = check_type(team)
+
+        url = self._url + 'users/' + self._user + '/orgs/' + \
+              org_id + '/teams/' + team_id + '/repos/'
+
+        response = urlopen(url)
+        return return_result(response)
