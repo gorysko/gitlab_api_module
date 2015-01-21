@@ -64,7 +64,7 @@ class GithubApi(object):
               org_id + '/public_members/'
 
         response = urlopen(url)
-        return return_response(response)
+        return return_result(response)
 
     def get_orgs_membership(self):
         """Gets lists of user membership in organizations."""
@@ -99,7 +99,7 @@ class GithubApi(object):
         url = self._url + 'orgs/' + org_id + '/teams/' + team_id
 
         response = urlopen(url)
-        return return_response
+        return return_result(response)
 
     def get_team_members(self, org, team):
         """Gets team members.
@@ -138,7 +138,7 @@ class GithubApi(object):
         url = self._url + 'users/' + self._user + '/repos/'
 
         response = urlopen(url)
-        return return_result(result)
+        return return_result(response)
 
     def get_org_repos(self, org):
         """Gets org repos.
@@ -150,7 +150,7 @@ class GithubApi(object):
         url = self._url + 'org/' + org_id + '/repos/'
 
         response = urlopen(url)
-        return return_result(reposonse)
+        return return_result(response)
 
     def get_repo(self, repo):
         """Gets repository by it's id.
