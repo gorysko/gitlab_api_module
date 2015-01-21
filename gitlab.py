@@ -9,6 +9,10 @@ from json import loads
 from urllib import urlencode
 from urllib2 import urlopen
 
+
+from utils import return_result
+from utils import check_type
+
 class GitlabApi(object):
     """gitlab api class """
 
@@ -16,7 +20,7 @@ class GitlabApi(object):
         """
         Args:
             private_token: gitlab private token, as string
-            url = gitlab api url, should be ended by '/api/v3/'
+            url: gitlab api url, should be ended by '/api/v3/'
         """
         self._private_token = private_token
         self._url = url
@@ -32,7 +36,7 @@ class GitlabApi(object):
 
         post_query = urlencode(query)
         response = urlopen(url + post_query)
-        return self._return_result(response)
+        return return_result(response)
 
     def get_projects_ids(self):
         """Gets all project ids"""
@@ -41,30 +45,30 @@ class GitlabApi(object):
 
     def get_project(self, project_id):
         """Gets project by project id"""
-        project_id = self._check_type(project_id)
+        project_id = check_type(project_id)
 
         url = self._url + 'projects/' + project_id + '?'
         query = {'private_token': self._private_token}
         post_query = urlencode(query)
 
         response = urlopen(url + post_query)
-        return self._return_result(response)
+        return return_result(response)
 
     def get_project_snippets(self, project_id):
         """Gets project snippets """
-        project_id = self._check_type(project_id)
+        project_id = check_type(project_id)
 
         url = self._url + 'projects/' + project_id + '/snippets/?'
         query = {'private_token': self._private_token}
         post_query = urlencode(query)
 
         response = urlopen(url + post_query)
-        return self._return_result(response)
+        return return_result(response)
 
     def get_project_snippet(self, project_id, snippet_id, raw=False):
         """Gets project snippet by id"""
-        project_id = self._check_type(project_id)
-        snippet_id = self._check_type(snippet_id)
+        project_id = check_type(project_id)
+        snippet_id = check_type(snippet_id)
 
         url = self._url + 'projects/' + project_id + '/snippets/' + \
               snippet_id + '?'
@@ -75,7 +79,7 @@ class GitlabApi(object):
         post_query = urlencode(query)
 
         response = urlopen(url + post_query)
-        return self._return_result(response)
+        return return_result(response)
 
     def get_project_info(self, project_id, info=0):
         """Gets repos of the project
@@ -83,16 +87,17 @@ class GitlabApi(object):
            project_id: id of the project
            info: info type which you wnat to obtaine
         """
-        if info in (0, 1, 2, 4):
-            project_id = self._check_type(project_id)
+        if info in ('tags', 'trees', 'files', 'commits', 'contributors'):
+            project_id = check_type(project_id)
             end = '/repository/tree/?'
 
-            keys = {1: '/repository/tags/?',
-                    2: '/repository/contributors/?',
-                    3: '/repository/files/?',
-                    4: '/repository/commits/?'}
+            keys = {'trees': '/repository/tags/?',
+                    'tags': '/repository/tags/?',
+                    'contributors': '/repository/contributors/?',
+                    'files': '/repository/files/?',
+                    'commits': '/repository/commits/?'}
 
-            end = keys[info]
+            end = keys.get(info, 'tags')
 
             url = self._url + 'projects/' + project_id + end
 
@@ -100,11 +105,12 @@ class GitlabApi(object):
             post_query = urlencode(query)
 
             response = urlopen(url + post_query)
-            return self._return_result(response)
+            return return_result(response)
+        return None
 
     def get_commit(self, project_id, commit_sha):
         """Gets commit info."""
-        project_id = self._check_type(project_id)
+        project_id = check_type(project_id)
 
         url = self._url + 'projects/' + project_id \
               + '/repository/commits/' + commit_sha + '?'
@@ -113,62 +119,46 @@ class GitlabApi(object):
         post_query = urlencode(query)
 
         response = urlopen(url + post_query)
-        return self._return_result(response)
+        return return_result(response)
 
     def get_events(self, project_id):
         """Get project events by project_id"""
-        project_id = self._check_type(project_id)
+        project_id = check_type(project_id)
 
         url = self._url + 'projects/' + project_id + '/' + 'events?'
         query = {'private_token': self._private_token}
         post_query = urlencode(query)
 
         response = urlopen(url + post_query)
-        return self._return_result(response)
+        return return_result(response)
 
     def get_members(self, project_id):
         """gets project members by project_id"""
-        project_id = self._check_type(project_id)
+        project_id = check_type(project_id)
 
         url = self._url + 'projects/' + project_id + '/' + 'members?'
         query = {'private_token': self._private_token}
         post_query = urlencode(query)
 
         response = urlopen(url + post_query)
-        return self._return_result(response)
+        return return_result(response)
 
     def users(self):
         """Gets list of users"""
         response = urlopen(self._url + 'users?' + self._private_token)
-        return self._return_result(response)
+        return return_result(response)
 
     def get_user(self, user_id):
         """Gets user by it's id"""
-        user_id = self._check_type(user_id)
+        user_id = check_type(user_id)
         response = urlopen(self._url + 'users/' + user_id + '?' + \
                            self._private_token)
-        return self._return_result(response)
+        return return_result(response)
 
     def get_user_keys(self, user_id):
         """Gets user ssh keys"""
-        user_id = self._check_type(user_id)
+        user_id = check_type(user_id)
 
         response = urlopen(self._url + 'users/' + user_id + '/keys' + '?' + \
                            self._private_token)
-        return self._return_result(response)
-
-    @staticmethod
-    def _return_result(response):
-        """Reads and checks response"""
-        if response is not None:
-            result = response.read()
-            if result is not None:
-                return loads(result)
-        return None
-
-    @staticmethod
-    def _check_type(item):
-        """Checks and casts type of item"""
-        if type(item) == int:
-            return str(item)
-        return item
+        return return_result(response)
