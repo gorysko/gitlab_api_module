@@ -17,3 +17,8 @@ def check_type(item):
     if type(item) == int:
         return str(item)
     return item
+
+
+def urlbuilder(*args):
+    """Builds correct url."""
+    return '/'.join(args)
