@@ -6,12 +6,10 @@
 """Gitlab api module"""
 
 from urllib import urlencode
-from urllib2 import urlopen
 
-
-from utils import return_result
 from utils import check_type
-
+from utils import urlbuilder
+from utils import helper
 class GitlabApi(object):
     """gitlab api class """
 

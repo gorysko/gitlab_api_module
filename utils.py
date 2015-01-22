@@ -1,7 +1,7 @@
 #! /usr/bin/env python
 
 """Additional utils for correct work."""
-
+from urllib2 import urlopen
 
 def return_result(response):
     """Reads and checks response"""
@@ -22,3 +22,10 @@ def check_type(item):
 def urlbuilder(*args):
     """Builds correct url."""
     return '/'.join(args)
+
+def helper(url):
+    """helper"""
+    response = urlopen(url)
+    if response is not None:
+        return return_result(response)
+    return None
