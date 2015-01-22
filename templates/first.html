@@ -4,13 +4,22 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Get stats</title>
+<style>
+  div.wrapper {
+      width: 300px;
+      height:300px;
+  }
+</style>
 </head>
 <body>
-<form action="stats" method="get">
-        <p> Please enter your user</p>
-        <input type="text" name="user"  value="{{ user }}">
-        <p> Please enter your repo name</p>
-        <input type="text" name="repo_name"  value="{{ repo_name }}">
-        <p><input type="submit" value="Get"/> <input type="reset" value="Clear"/></p>
-</form>
-</body></html>
+<div class="wrapper">
+  <form action="stats" method="get">
+    <p> Please enter your user</p>
+    <input type="text" name="user"  value="{{ user }}">
+    <p> Please enter your repo name</p>
+    <input type="text" name="repo_name"  value="{{ repo_name }}">
+    <p><input type="submit" value="Get"/> <input type="reset" value="Clear"/></p>
+  </form>
+</div>
+</body>
+</html>
