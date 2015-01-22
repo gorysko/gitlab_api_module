@@ -1,0 +1,13 @@
+<!doctype html>
+<title>Stats</title>
+{% if user %}
+  <h1>Hello {{ user }}!</h1>
+{% else %}
+  <h1>No user </h1>
+{% endif %}
+
+{% if repo %}
+  <h1>His repo: {{ repo }}</h1>
+{% else %}
+  <h1>No repo</h1>
+{% endif %}
