@@ -10,6 +10,7 @@ from urllib import urlencode
 from utils import check_type
 from utils import urlbuilder
 from utils import helper
+
 class GitlabApi(object):
     """gitlab api class """
 
