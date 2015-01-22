@@ -18,11 +18,12 @@ def hello_world(name=None):
 def get():
     user = request.args.get('user', '')
     repo = request.args.get('repo_name', '')
-    api = init_api(user)
+    api = _init_api(user)
     return render_template('stats.html', user=user, repo=repo,
                            result=api.get_user_repos())
 
-def init_api(user_name, git=True):
+
+def _init_api(user_name, git=True):
     if git:
         api = github.GithubApi('https://api.github.com/', user_name)
         return api
