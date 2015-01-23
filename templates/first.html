@@ -1,18 +1,5 @@
-{% block doc -%}
-<!DOCTYPE html>
-<html{% block html_attribs %}{% endblock html_attribs %}>
-{%- block html %}
-  <head>
-    {%- block head %}
-    <title>{% block title %}{% endblock title %}</title>
-
-    {%- block metas %}
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    {%- endblock metas %}
-    {%- endblock head %}
-  </head>
-  <body>
-     {% block body -%}
+{% extends "layout.html" %}
+{% block body %}
      <div class="wrapper">
 
        <form action="stats" method="get">
@@ -31,8 +18,4 @@
          <p><input type="submit" value="Get"/> <input type="reset" value="Clear"/></p>
        </form>
      </div>
-    {%- endblock body %}
-  </body>
-  {%- endblock html %}
-</html>
-{% endblock doc -%}
+ {% endblock %}

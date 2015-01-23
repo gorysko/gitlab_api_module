@@ -23,7 +23,7 @@ def get():
     api = _init_api(user)
     return render_template('stats.html', user=user, repo=repo,
                            languages=api.get_repo_info(repo, 'languages'),
-                           branches=api.get_repo_info(repo, 'branches'),
+                           branches=api.get_repo_info(repo, 'branches')
                            contributors=api.get_repo_info(repo, 'contributors'))
 
 
