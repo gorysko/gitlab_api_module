@@ -91,13 +91,13 @@ class GitlabApi(object):
 
             keys = {'trees': '/repository/tags/?',
                     'tags': '/repository/tags/?',
-                    'contributors': '/repository/contributors/?',
                     'files': '/repository/files/?',
                     'commits': '/repository/commits/?'}
+                    'contributors': '/repository/contributors/?',
 
             end = keys.get(info, 'tags')
 
-            url = self._url + 'projects/' + project_id + end
+            url = self._url + 'projects/p' + project_id + end
 
             query = {'private_token': self._private_token}
             post_query = urlencode(query)

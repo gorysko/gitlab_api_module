@@ -18,9 +18,10 @@ def hello_world(name=None):
 def get():
     user = request.args.get('user', '')
     repo = request.args.get('repo_name', '')
+    info = request.args.get('info', '')
     api = _init_api(user)
     return render_template('stats.html', user=user, repo=repo,
-                           result=api.get_user_repos())
+                           result=api.get_repo_info(repo, info))
 
 
 def _init_api(user_name, git=True):
