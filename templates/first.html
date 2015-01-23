@@ -1,33 +1,38 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-               "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Get stats</title>
-<style>
-  div.wrapper {
-      width: 300px;
-      height:300px;
-  }
-</style>
-</head>
-<body>
-<div class="wrapper">
-  <form action="stats" method="get">
-    <p> Please enter your user</p>
-    <input type="text" name="user"  value="{{ user }}">
-    <p> Please enter your repo name</p>
-    <input type="text" name="repo_name"  value="{{ repo_name }}">
-<!--    <p>
-      <select name="info" value="{{ info }}">
-        <option value="contributors">Contributors</option>
-        <option value="languages">Languages</option>
-        <option value="branches">Branches</option>
-      </select>
-    </p>
--->
-    <p><input type="submit" value="Get"/> <input type="reset" value="Clear"/></p>
-  </form>
-</div>
-</body>
+{% block doc -%}
+<!DOCTYPE html>
+<html{% block html_attribs %}{% endblock html_attribs %}>
+{%- block html %}
+  <head>
+    {%- block head %}
+    <title>{% block title %}{% endblock title %}</title>
+
+    {%- block metas %}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {%- endblock metas %}
+    {%- endblock head %}
+  </head>
+  <body>
+     {% block body -%}
+     <div class="wrapper">
+
+       <form action="stats" method="get">
+         <p> Please enter your user</p>
+         <input type="text" name="user"  value="{{ user }}">
+         <p> Please enter your repo name</p>
+         <input type="text" name="repo_name"  value="{{ repo_name }}">
+         <!--    <p>
+           <select name="info" value="{{ info }}">
+             <option value="contributors">Contributors</option>
+             <option value="languages">Languages</option>
+             <option value="branches">Branches</option>
+           </select>
+         </p>
+         -->
+         <p><input type="submit" value="Get"/> <input type="reset" value="Clear"/></p>
+       </form>
+     </div>
+    {%- endblock body %}
+  </body>
+  {%- endblock html %}
 </html>
+{% endblock doc -%}

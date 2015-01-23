@@ -1,43 +1,56 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-               "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Stats</title>
-</head>
-<body>
-  <title>Stats</title>
-  {% if user %}
-    <p>Hello {{ user }}!</p>
-  {% else %}
-    <p>No user </p>
-  {% endif %}
+{% block doc -%}
+<!DOCTYPE html>
+<html{% block html_attribs %}{% endblock html_attribs %}>
+{%- block html %}
+  <head>
+    {%- block head %}
+    <title>{% block title %}{% endblock title %}</title>
 
-  {% if repo %}
-    <p>His repo: {{ repo }}</p>
-  {% else %}
-    <p>No repo</p>
-  {% endif %}
+    {%- block metas %}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {%- endblock metas %}
+    {%- endblock head %}
+  </head>
+  <body>
+     {% block body -%}
 
-  {% if languages and branches and contributors %}
-    <p> List of languages used in repo</p>
-    <ul>
-    {% for item in languages %}
-      <li>{{ item }}</li>
-    {% endfor %}
-    </ul>
-    <p>List of contributors</p>
-    <ul>
-    {% for contributor in contributors %}
-      <li>{{ contributor['url'] }}</li>
-    {% endfor %}
-    </ul>
-    <p>List of branches</p>
-    <ul>
-    {% for branche in branches  %}
-      <li>{{ branche['name'] }}</li>
-    {% endfor %}
-    </ul>
-  {% endif %}
-</body>
+     {% block content %}
+     <title>Stats</title>
+     {% if user %}
+     <p>Hello {{ user }}!</p>
+     {% else %}
+     <p>No user </p>
+     {% endif %}
+
+     {% if repo %}
+     <p>His repo: {{ repo }}</p>
+     {% else %}
+     <p>No repo</p>
+     {% endif %}
+
+     {% if languages and branches and contributors %}
+     <p> List of languages used in repo</p>
+     <ul>
+       {% for item in languages %}
+       <li>{{ item }}</li>
+       {% endfor %}
+     </ul>
+     <p>List of contributors</p>
+     <ul>
+       {% for contributor in contributors %}
+       <li>{{ contributor['url'] }}</li>
+       {% endfor %}
+     </ul>
+     <p>List of branches</p>
+     <ul>
+       {% for branche in branches  %}
+       <li>{{ branche['name'] }}</li>
+       {% endfor %}
+     </ul>
+     {% endif %}
+     {% endblock %}
+    {%- endblock body %}
+  </body>
+  {%- endblock html %}
 </html>
+{% endblock doc -%}
