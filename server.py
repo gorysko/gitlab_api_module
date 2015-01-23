@@ -4,12 +4,10 @@
 from flask import Flask
 from flask import render_template
 from flask import request
-from flask_bootstrap import Bootstrap
 
 from application import github
 
 app = Flask(__name__)
-Bootstrap(app)
 
 @app.route('/', methods=['GET'])
 def hello_world(name=None):
