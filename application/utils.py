@@ -24,6 +24,7 @@ def urlbuilder(args):
     """Builds correct url."""
     return '/'.join(args)
 
+
 def helper(url):
     """helper"""
     response = urlopen(url)
