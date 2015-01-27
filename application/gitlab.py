@@ -124,7 +124,7 @@ class GitlabApi(object):
                                                  'users', user_id, 'keys'),
                                  self._private_token))
 
-@staticmethod
+
 def _add_query(url, private_token, data=None):
     """Adds query to url"""
     if url is not None:
