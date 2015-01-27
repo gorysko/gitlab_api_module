@@ -5,9 +5,9 @@
 
 """Github api module."""
 
-from utils import check_type
-from utils import urlbuilder
-from utils import helper
+from gitlab_api.application.utils import check_type
+from gitlab_api.application.utils import urlbuilder
+from gitlab_api.application.utils import helper
 
 class GithubApi(object):
     """github api class."""
@@ -42,23 +42,10 @@ class GithubApi(object):
 
     def get_orgs_membership(self):
         """Gets lists of user membership in organizations."""
-        return helper(urlbuilder([self._url[:-1], 'users', self._user,
+        return helper(urlbuilder([self._url[:-1], self._user,
                                   'memberships', 'orgs']))
 
-    def get_team(self, org, team):
-        """Gets team by id.
-
-        Args:
-            org: organization id , as int
-            team: team id in organization, as int.
-        """
-        org_id = check_type(org)
-        team_id = check_type(team)
-
-        return helper(urlbuilder([self._url[:-1], 'orgs', org_id,
-                                  'teams', team_id]))
-
-    def get_team_info(self, org, team, info='members'):
+    def get_team_info(self, org, team, info=None):
         """Gets team members.
 
         Args:
@@ -68,10 +55,14 @@ class GithubApi(object):
 
         org_id = check_type(org)
         team_id = check_type(team)
-        if info in ('members', 'repos'):
-            return helper(urlbuilder([self._url[:-1], 'orgs', org_id, 'teams',
-                                      team_id, info]))
-        return None
+        if info is None:
+            url = urlbuilder([self._url[:-1], 'orgs', org_id, 'teams', team_id])
+        elif info in ('members', 'repos'):
+            url = urlbuilder([self._url[:-1], 'orgs', org_id, 'teams',
+                                      team_id, info])
+        else:
+            return None
+        return helper(url)
 
     def get_user_repos(self):
         """Gets user repos."""
