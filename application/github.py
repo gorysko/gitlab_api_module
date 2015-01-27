@@ -23,7 +23,7 @@ class GithubApi(object):
 
     def get_orgs(self):
         """Gets user organiztions."""
-        return helper(urlbuilder([self._url[:-1], 'users', self._user, 'orgs']))
+        return helper(urlbuilder(self._url[:-1], 'users', self._user, 'orgs'))
 
     def get_org_info(self, org, info=None):
         """Get organization members.
@@ -33,17 +33,17 @@ class GithubApi(object):
         """
         org_id = check_type(org)
         if info is None:
-            url = urlbuilder([self._url[:-1], 'orgs', org_id])
+            url = urlbuilder(self._url[:-1], 'orgs', org_id)
         elif info in ('members', 'public_members', 'teams', 'hooks'):
-            url = urlbuilder([self._url[:-1], 'orgs', org_id, info])
+            url = urlbuilder(self._url[:-1], 'orgs', org_id, info)
         else:
             return None
         return helper(url)
 
     def get_orgs_membership(self):
         """Gets lists of user membership in organizations."""
-        return helper(urlbuilder([self._url[:-1], self._user,
-                                  'memberships', 'orgs']))
+        return helper(urlbuilder(self._url[:-1], self._user,
+                                  'memberships', 'orgs'))
 
     def get_team_info(self, org, team, info=None):
         """Gets team members.
@@ -56,18 +56,18 @@ class GithubApi(object):
         org_id = check_type(org)
         team_id = check_type(team)
         if info is None:
-            url = urlbuilder([self._url[:-1], 'orgs', org_id, 'teams', team_id])
+            url = urlbuilder(self._url[:-1], 'orgs', org_id, 'teams', team_id)
         elif info in ('members', 'repos'):
-            url = urlbuilder([self._url[:-1], 'orgs', org_id, 'teams',
-                                      team_id, info])
+            url = urlbuilder(self._url[:-1], 'orgs', org_id, 'teams',
+                                      team_id, info)
         else:
             return None
         return helper(url)
 
     def get_user_repos(self):
         """Gets user repos."""
-        return helper(urlbuilder([self._url[:-1], 'users',
-                                  self._user, 'repos']))
+        return helper(urlbuilder(self._url[:-1], 'users',
+                                  self._user, 'repos'))
 
     def get_org_repos(self, org):
         """Gets org repos.
@@ -76,7 +76,7 @@ class GithubApi(object):
             org: organization id, as int.
         """
         org_id = check_type(org)
-        return helper(urlbuilder([self._url[:-1], 'org', org_id, 'repos']))
+        return helper(urlbuilder(self._url[:-1], 'org', org_id, 'repos'))
 
     def get_repo(self, repo):
         """Gets repository by it's id.
@@ -84,7 +84,7 @@ class GithubApi(object):
         Args:
             repo: repositiory name, as string
         """
-        return helper(urlbuilder([self._url[:-1], 'repos', self._user, repo]))
+        return helper(urlbuilder(self._url[:-1], 'repos', self._user, repo))
 
     def get_repo_info(self, repo, info='contributors'):
         """Gets repository contributors by repo id.
@@ -94,8 +94,8 @@ class GithubApi(object):
         """
         if info in ('contributors', 'languages', 'tags',
                     'branches', 'collaborators'):
-            return helper(urlbuilder([self._url[:-1], 'repos',
-                                      self._user, repo, info]))
+            return helper(urlbuilder(self._url[:-1], 'repos',
+                                      self._user, repo, info))
         return None
 
     def get_repo_branch(self, repo, branch):
@@ -105,8 +105,8 @@ class GithubApi(object):
             repo: repo name , as string.
             branch: branch name, as string.
         """
-        return helper(urlbuilder([self._url[:-1], 'repos',
-                                  self._user, repo, branch]))
+        return helper(urlbuilder(self._url[:-1], 'repos',
+                                  self._user, repo, branch))
 
     def get_repo_collaborator(self, repo):
         """Gets repo collaborator.
@@ -114,5 +114,5 @@ class GithubApi(object):
         Args:
             repo: repo name, as string.
         """
-        return helper(urlbuilder([self._url[:-1], 'repos', self._user, repo,
-                                  'collaborators']))
+        return helper(urlbuilder(self._url[:-1], 'repos', self._user, repo,
+                                  'collaborators'))
