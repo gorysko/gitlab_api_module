@@ -25,7 +25,7 @@ class GitlabApi(object):
 
     def get_projects(self, archived='true', order_by='id', sort='asc'):
         """Gets projects data as dict"""
-        url = self._url + 'projects?'
+        url = urlbuilder(self._url[:-1], 'projects')
 
         query = {'private_token': self._private_token,
                  'archived': archived,
@@ -33,7 +33,7 @@ class GitlabApi(object):
                  'sort': sort}
 
         post_query = urlencode(query)
-        return helper(url + post_query)
+        return helper(url + '?' + post_query)
 
     def get_projects_ids(self):
         """Gets all project ids"""
@@ -44,19 +44,19 @@ class GitlabApi(object):
         """Gets project by project id"""
         project_id = check_type(project_id)
 
-        url = self._url + 'projects/' + project_id + '?'
+        url = urlbuilder(self._url[:-1], 'projects', project_id)
         query = {'private_token': self._private_token}
         post_query = urlencode(query)
 
-        return helper(url + post_query)
+        return helper(url + '?' + post_query)
 
     def get_project_snippets(self, project_id):
         """Gets project snippets """
         project_id = check_type(project_id)
 
-        url = self._url + 'projects/' + project_id + '/snippets/?'
+        url = urlbuilder(self._url[:-1], 'projects', project_id, 'snippets')
         query = {'private_token': self._private_token}
-        post_query = urlencode(query)
+        post_query = urlencode(url + '?' + query)
 
         return helper(url + post_query)
 
@@ -65,15 +65,15 @@ class GitlabApi(object):
         project_id = check_type(project_id)
         snippet_id = check_type(snippet_id)
 
-        url = self._url + 'projects/' + project_id + '/snippets/' + \
-              snippet_id + '?'
+        url = urlbuilder(self._url[:-1], 'projects',
+                         project_id, 'snippets', snippet_id)
         if raw:
-            url = url[:-1] + 'raw' +'?'
+            url = urlbuilder(url, 'raw')
 
         query = {'private_token': self._private_token}
         post_query = urlencode(query)
 
-        return helper(url + post_query)
+        return helper(url + '?' + post_query)
 
     def get_project_info(self, project_id, info=0):
         """Gets repos of the project
@@ -93,59 +93,60 @@ class GitlabApi(object):
 
             end = keys.get(info, 'tags')
 
-            url = self._url + 'projects/p' + project_id + end
+            url = urlbuilder(self._url[:-1], 'projects', project_id, end)
 
             query = {'private_token': self._private_token}
             post_query = urlencode(query)
 
-            return helper(url + post_query)
+            return helper(url + '?' + post_query)
         return None
 
     def get_commit(self, project_id, commit_sha):
         """Gets commit info."""
         project_id = check_type(project_id)
 
-        url = self._url + 'projects/' + project_id \
-              + '/repository/commits/' + commit_sha + '?'
+        url = urlbuilder(self._url[:-1], 'projects', project_id,
+                         'repository', 'commits', commit_sha)
 
         query = {'private_token': self._private_token}
         post_query = urlencode(query)
 
-        return helper(url + post_query)
+        return helper(url + '?' + post_query)
 
     def get_events(self, project_id):
         """Get project events by project_id"""
         project_id = check_type(project_id)
 
-        url = self._url + 'projects/' + project_id + '/' + 'events?'
+        url = urlbuilder(self._url[:-1], 'projects', project_id, 'events')
         query = {'private_token': self._private_token}
         post_query = urlencode(query)
 
-        return helper(url + post_query)
+        return helper(url + '?' + post_query)
 
     def get_members(self, project_id):
         """gets project members by project_id"""
         project_id = check_type(project_id)
 
-        url = self._url + 'projects/' + project_id + '/' + 'members?'
+        url = urlbuilder(self._url[:-1], 'projects', project_id, 'members')
         query = {'private_token': self._private_token}
         post_query = urlencode(query)
 
-        return helper(url + post_query)
+        return helper(url + '?' + post_query)
 
     def users(self):
         """Gets list of users"""
-        return helper(urlbuilder(self._url, 'users?', self._private_token))
+        return helper(urlbuilder(self._url[:-1], 'users?', self._private_token))
 
     def get_user(self, user_id):
         """Gets user by it's id"""
         user_id = check_type(user_id)
-        return helper(self._url + 'users/' + user_id + \
-                      '?' + self._private_token)
+        url = urlbuilder(self._url[:-1], 'users', user_id)
+        query = {'private_token': self._private_token}
+        return helper(url + '?' + query)
 
     def get_user_keys(self, user_id):
         """Gets user ssh keys"""
         user_id = check_type(user_id)
-
-        return helper(self._url + 'users/' + user_id + \
-                      '/keys' + '?' + self._private_token)
+        url = urlbuilder(self._url[:-1], 'users', user_id, 'keys')
+        query = {'private_token': self._private_token}
+        return helper(url + '?' + query)
