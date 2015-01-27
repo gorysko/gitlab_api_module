@@ -25,24 +25,20 @@ class GithubApi(object):
         """Gets user organiztions."""
         return helper(urlbuilder([self._url[:-1], 'users', self._user, 'orgs']))
 
-    def get_org(self, org):
-        """Get user org.
-
-        Args:
-            org: user organization id, as int
-        """
-        org_id = check_type(org)
-        return helper(urlbuilder([self._url, 'orgs', org_id]))
-
-    def get_org_info(self, org, info='members'):
+    def get_org_info(self, org, info=None):
         """Get organization members.
 
         Args
            org: user organization id,  as int.
         """
         org_id = check_type(org)
-        if info in ('members', 'public_members', 'teams', 'hooks'):
-            return helper(urlbuilder([self._url[:-1], 'orgs', org_id, info]))
+        if info is None:
+            url = urlbuilder([self._url[:-1], 'orgs', org_id])
+        elif info in ('members', 'public_members', 'teams', 'hooks'):
+            url = urlbuilder([self._url[:-1], 'orgs', org_id, info])
+        else:
+            return None
+        return helper(url)
 
     def get_orgs_membership(self):
         """Gets lists of user membership in organizations."""
@@ -62,7 +58,7 @@ class GithubApi(object):
         return helper(urlbuilder([self._url[:-1], 'orgs', org_id,
                                   'teams', team_id]))
 
-    def get_team_info(self, org, team, detail='members'):
+    def get_team_info(self, org, team, info='members'):
         """Gets team members.
 
         Args:
@@ -72,9 +68,9 @@ class GithubApi(object):
 
         org_id = check_type(org)
         team_id = check_type(team)
-        if detail in ('members', 'repos'):
+        if info in ('members', 'repos'):
             return helper(urlbuilder([self._url[:-1], 'orgs', org_id, 'teams',
-                                      team_id, detail]))
+                                      team_id, info]))
         return None
 
     def get_user_repos(self):
