@@ -60,6 +60,25 @@ class GithubApi(object):
         return helper(urlbuilder([self._url[:-1], 'users', self._user,
                                   'memberships', 'orgs']))
 
+   def get_orgs_events(self, org):
+        """Gets lists of organization's events.
+        Args:
+            org: user organiztion id, as int.
+        """
+        org_id = check_type(org)
+
+        return helper(urlbuilder([self._url[:-1], 'users', self._user,
+                                  'events', 'orgs', org_id]))
+
+    def get_org_members(self, org):
+        """Get lists of organization's public events.
+
+        Args
+           org: user organization id,  as int.
+        """
+        org_id = check_type(org)
+        return helper(urlbuilder([self._url[:-1], 'orgs', org_id, 'events']))
+
     def get_teams(self, org):
         """Gets list of teams.
         Args:
@@ -102,6 +121,26 @@ class GithubApi(object):
         """Gets user repos."""
         return helper(urlbuilder([self._url[:-1], 'users',
                                   self._user, 'repos']))
+
+    def get_user_events(self):
+        """Gets user events."""
+        return helper(urlbuilder([self._url[:-1], 'users',
+                                  self._user, 'received_events']))
+
+    def get_user_public_events(self):
+        """Gets user public_events."""
+        return helper(urlbuilder([self._url[:-1], 'users',
+                                  self._user, 'received_events', 'public']))
+
+    def get_user_repos_watched(self):
+        """Gets user repositories watched."""
+        return helper(urlbuilder([self._url[:-1], 'users',
+                                  self._user, 'subscriptions']))
+
+    def get_user_gists(self):
+        """Gets user gists."""
+        return helper(urlbuilder([self._url[:-1], 'users',
+                                  self._user, 'gists']))
 
     def get_org_repos(self, org):
         """Gets org repos.
@@ -150,3 +189,124 @@ class GithubApi(object):
         """
         return helper(urlbuilder([self._url[:-1], 'repos', self._user, repo,
                                   'collaborators']))
+
+    def get_repo_events(self, repo):
+        """Gets repository events.
+
+        Args:
+            repo: repo name, as string.
+        """
+        return helper(urlbuilder([self._url[:-1], 'repos',
+                                  self._user, repo, 'events']))
+
+    def get_repo_watchers(self, repo):
+        """Gets repository watchers.
+
+        Args:
+            repo: repo name, as string.
+        """
+        return helper(urlbuilder([self._url[:-1], 'repos',
+                                  self._user, repo, 'subscribers']))
+
+    def get_repo_issues(self, repo):
+        """Gets repository issues.
+
+        Args:
+            repo: repo name, as string.
+        """
+        return helper(urlbuilder([self._url[:-1], 'repos',
+                                  self._user, repo, 'issues']))
+
+    def get_repo_assignees(self, repo):
+        """Gets repository assignees.
+
+        Args:
+            repo: repo name, as string.
+        """
+        return helper(urlbuilder([self._url[:-1], 'repos',
+                                  self._user, repo, 'assignees']))
+
+    def get_repo_issues_comments(self, repo):
+        """Gets repository issues comments.
+
+        Args:
+            repo: repo name, as string.
+        """
+        return helper(urlbuilder([self._url[:-1], 'repos',
+                                  self._user, repo, 'issues', 'comments']))
+
+    def get_repo_issue_comments(self, repo, issue):
+        """Gets repository issue comments.
+
+        Args:
+            repo: repo name, as string.
+            issue: issue id, as int.
+        """
+
+        iss_id = check_type(issue)
+        return helper(urlbuilder([self._url[:-1], 'repos',
+                                  self._user, repo, 'issues', iss_id, 'comments']))
+
+    def get_repo_issue_events(self, repo, issue):
+        """Gets repository issue events.
+
+        Args:
+            repo: repo name, as string.
+            issue: issue id, as int.
+        """
+
+        iss_id = check_type(issue)
+        return helper(urlbuilder([self._url[:-1], 'repos',
+                                  self._user, repo, 'issues', iss_id, 'events']))
+
+    def get_repo_issues_events(self, repo):
+        """Gets repository issues events.
+
+        Args:
+            repo: repo name, as string.
+        """
+
+        return helper(urlbuilder([self._url[:-1], 'repos',
+                                  self._user, repo, 'issues', 'events']))
+
+    def get_repo_labels(self, repo):
+        """Gets all repository labels.
+
+        Args:
+            repo: repo name, as string.
+        """
+        return helper(urlbuilder([self._url[:-1], 'repos',
+                                  self._user, repo, 'labels']))
+
+    def get_repo_issue_labels(self, repo, issue):
+        """Gets repository issue labels.
+
+        Args:
+            repo: repo name, as string.
+            issue: issue id, as int.
+        """
+
+        iss_id = check_type(issue)
+        return helper(urlbuilder([self._url[:-1], 'repos',
+                                  self._user, repo, 'issues', iss_id, 'labels']))
+
+    def get_repo_issue_milestone_labels(self, repo, issue):
+        """Gets repository issue milestone labels.
+
+        Args:
+            repo: repo name, as string.
+            issue: issue id, as int.
+        """
+
+        iss_id = check_type(issue)
+        return helper(urlbuilder([self._url[:-1], 'repos',
+                                  self._user, repo, 'milestone', iss_id, 'labels']))
+
+    def get_repo_milestones(self, repo):
+        """Gets all repository milestones.
+
+        Args:
+            repo: repo name, as string.
+        """
+        return helper(urlbuilder([self._url[:-1], 'repos',
+                                  self._user, repo, 'milestones']))
