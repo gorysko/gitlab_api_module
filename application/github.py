@@ -5,9 +5,9 @@
 
 """Github api module."""
 
-from gitlab_api.application.utils import check_type
-from gitlab_api.application.utils import urlbuilder
-from gitlab_api.application.utils import helper
+from application.utils import check_type
+from application.utils import urlbuilder
+from application.utils import helper
 
 class GithubApi(object):
     """github api class."""
@@ -21,7 +21,7 @@ class GithubApi(object):
         self._url = url
         self._user = user
 
-   def get_orgs_events(self, org):
+    def get_orgs_events(self, org):
         """Gets lists of organization's events.
         Args:
             org: user organiztion id, as int.
@@ -160,50 +160,17 @@ class GithubApi(object):
         return helper(urlbuilder(self._url[:-1], 'repos',
                                  self._user, repo, branch))
 
-    def get_repo_collaborator(self, repo):
+    def get_repo_collaborator(self, repo, info):
         """Gets repo collaborator.
 
         Args:
             repo: repo name, as string.
         """
-        return helper(urlbuilder(self._url[:-1], 'repos', self._user, repo,
-                                 'collaborators'))
-
-    def get_repo_events(self, repo):
-        """Gets repository events.
-
-        Args:
-            repo: repo name, as string.
-        """
-        return helper(urlbuilder(self._url[:-1], 'repos',
-                                  self._user, repo, 'events'))
-
-    def get_repo_watchers(self, repo):
-        """Gets repository watchers.
-
-        Args:
-            repo: repo name, as string.
-        """
-        return helper(urlbuilder(self._url[:-1], 'repos',
-                                 self._user, repo, 'subscribers'))
-
-    def get_repo_issues(self, repo):
-        """Gets repository issues.
-
-        Args:
-            repo: repo name, as string.
-        """
-        return helper(urlbuilder(self._url[:-1], 'repos',
-                                 self._user, repo, 'issues'))
-
-    def get_repo_assignees(self, repo):
-        """Gets repository assignees.
-
-        Args:
-            repo: repo name, as string.
-        """
-        return helper(urlbuilder(self._url[:-1], 'repos',
-                                 self._user, repo, 'assignees'))
+        if info in ('milestones', 'collaborators', 'events', 'subscribers',
+            'issues', 'assignees', 'labels'):
+            return helper(urlbuilder(self._url[:-1], 'repos', self._user, repo,
+                                     info))
+        return None
 
     def get_repo_issues_comments(self, repo):
         """Gets repository issues comments.
@@ -214,7 +181,7 @@ class GithubApi(object):
         return helper(urlbuilder(self._url[:-1], 'repos',
                                  self._user, repo, 'issues', 'comments'))
 
-    def get_repo_issue_comments(self, repo, issue):
+    def get_repo_issue_info(self, repo, issue, info=None):
         """Gets repository issue comments.
 
         Args:
@@ -223,51 +190,10 @@ class GithubApi(object):
         """
 
         iss_id = check_type(issue)
-        return helper(urlbuilder(self._url[:-1], 'repos',
-                                 self._user, repo, 'issues', iss_id, 'comments'))
-
-    def get_repo_issue_events(self, repo, issue):
-        """Gets repository issue events.
-
-        Args:
-            repo: repo name, as string.
-            issue: issue id, as int.
-        """
-
-        iss_id = check_type(issue)
-        return helper(urlbuilder(self._url[:-1], 'repos',
-                                 self._user, repo, 'issues', iss_id, 'events'))
-
-    def get_repo_issues_events(self, repo):
-        """Gets repository issues events.
-
-        Args:
-            repo: repo name, as string.
-        """
-
-        return helper(urlbuilder(self._url[:-1], 'repos',
-                                 self._user, repo, 'issues', 'events'))
-
-    def get_repo_labels(self, repo):
-        """Gets all repository labels.
-
-        Args:
-            repo: repo name, as string.
-        """
-        return helper(urlbuilder(self._url[:-1], 'repos',
-                                 self._user, repo, 'labels'))
-
-    def get_repo_issue_labels(self, repo, issue):
-        """Gets repository issue labels.
-
-        Args:
-            repo: repo name, as string.
-            issue: issue id, as int.
-        """
-
-        iss_id = check_type(issue)
-        return helper(urlbuilder(self._url[:-1], 'repos',
-                                 self._user, repo, 'issues', iss_id, 'labels'))
+        if info in ('comments', 'events', 'labels', 'events'):
+            return helper(urlbuilder(self._url[:-1], 'repos',
+                                     self._user, repo, 'issues', iss_id, info))
+        return None
 
     def get_repo_issue_milestone_labels(self, repo, issue):
         """Gets repository issue milestone labels.
@@ -281,12 +207,3 @@ class GithubApi(object):
         return helper(urlbuilder(self._url[:-1], 'repos',
                                  self._user, repo, 'milestone',
                                  iss_id, 'labels'))
-
-    def get_repo_milestones(self, repo):
-        """Gets all repository milestones.
-
-        Args:
-            repo: repo name, as string.
-        """
-        return helper(urlbuilder(self._url[:-1], 'repos',
-                                 self._user, repo, 'milestones'))
