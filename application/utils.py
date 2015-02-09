@@ -20,9 +20,10 @@ def check_type(item):
     return item
 
 
-def urlbuilder(args):
+def urlbuilder(*args):
     """Builds correct url."""
     return '/'.join(args)
+
 
 def helper(url):
     """helper"""
