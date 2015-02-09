@@ -4,7 +4,6 @@
 from flask import Flask
 from flask import render_template
 from flask import request
-from flask import render_template_string
 from flask import session
 from flask import g
 from flask import redirect
@@ -71,7 +70,7 @@ def after_request(response):
 
 @app.route('/', methods=['GET'])
 def index(name=None):
-    return render_template('first.html', name=name)
+    return render_template('first.html', name=name, user=g.user)
 
 
 @github.access_token_getter

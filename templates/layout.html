@@ -7,5 +7,12 @@
   {% for message in get_flashed_messages() %}
     <div class=flash>{{ message }}</div>
   {% endfor %}
-  {% block body %}{% endblock %}
+  {% if user %}
+  	Hello! <a href="{{ url_for("user") }}">Get user</a> 
+  	<a href="{{ url_for("logout") }}">Logout</a>
+  	{% block body %}{% endblock %}
+  {% else %}
+  	Hello! <a href="{{ url_for("login") }}">Login</a>
+  {% endif %}
+
 </div>
