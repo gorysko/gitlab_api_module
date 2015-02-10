@@ -7,9 +7,9 @@
 
 from urllib import urlencode
 
-from gitlab_api.application.utils import check_type
-from gitlab_api.application.utils import urlbuilder
-from gitlab_api.application.utils import helper
+from application.utils import check_type
+from application.utils import urlbuilder
+from application.utils import helper
 
 class GitlabApi(object):
     """gitlab api class """
@@ -24,14 +24,18 @@ class GitlabApi(object):
         self._url = url
 
     # pylint: disable-msg=E1121
-    def get_projects(self, archived='true', order_by='id', sort='asc'):
+    def get_projects(self, archived='true', order_by='id',
+                     sort='asc', owned=False):
         """Gets projects data as dict"""
         query = {'private_token': self._private_token,
                  'archived': archived,
                  'order_by': order_by,
                  'sort': sort}
-        return helper(_add_query(urlbuilder(self._url[:-1], 'projects'),
-                                 self._private_token, query))
+        url = urlbuilder(self._url[:-1], 'projects')
+        if owned:
+            url = urlbuilder(url, 'owned')
+
+        return helper(_add_query(url, self._private_token, query))
 
     def get_projects_ids(self):
         """Gets all project ids"""
@@ -62,19 +66,22 @@ class GitlabApi(object):
             url = urlbuilder(url, 'raw')
         return helper(_add_query(url, self._private_token))
 
-    def get_project_info(self, project_id, info=0):
+    def get_project_info(self, project_id, info=None):
         """Gets repos of the project
         Args:
            project_id: id of the project
            info: info type which you wnat to obtaine
         """
-        if info in ('tags', 'trees', 'files', 'commits', 'contributors'):
+        keys = {'trees': '/repository/tree/?',
+                'tags': '/repository/tags/?',
+                'files': '/repository/files/?',
+                'commits': '/repository/commits/?',
+                'contributors': '/repository/contributors/?',
+                'events': 'events',
+                'members': 'members',
+                'hooks': 'hooks'}
+        if info in keys:
             project_id = check_type(project_id)
-            keys = {'trees': '/repository/tree/?',
-                    'tags': '/repository/tags/?',
-                    'files': '/repository/files/?',
-                    'commits': '/repository/commits/?',
-                    'contributors': '/repository/contributors/?'}
             return helper(_add_query(urlbuilder(self._url[:-1],
                                                       'projects',
                                                       project_id,
@@ -110,6 +117,11 @@ class GitlabApi(object):
         return helper(_add_query(urlbuilder(self._url[:-1], 'users'),
                                  self._private_token))
 
+    def keys(self):
+        """Gets list of users"""
+        return helper(_add_query(urlbuilder(self._url[:-1], 'users', 'keys'),
+                                 self._private_token))
+
     def get_user(self, user_id):
         """Gets user by it's id"""
         user_id = check_type(user_id)
@@ -123,6 +135,8 @@ class GitlabApi(object):
         return helper(_add_query(urlbuilder(self._url[:-1],
                                                  'users', user_id, 'keys'),
                                  self._private_token))
+
+
 
 
 def _add_query(url, private_token, data=None):
