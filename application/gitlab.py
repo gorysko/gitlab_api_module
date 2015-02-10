@@ -79,7 +79,9 @@ class GitlabApi(object):
                 'contributors': '/repository/contributors/?',
                 'events': 'events',
                 'members': 'members',
-                'hooks': 'hooks'}
+                'hooks': 'hooks',
+                'branches': 'branches'}
+
         if info in keys:
             project_id = check_type(project_id)
             return helper(_add_query(urlbuilder(self._url[:-1],
@@ -101,6 +103,80 @@ class GitlabApi(object):
                                                  project_id, 'members',
                                                  user_id),
                                  self._private_token))
+
+    def get_branch(self, project_id, branch):
+        """Gets single branch of the project.
+
+        Args:
+            project_id: id of the project.
+            brnahc: name of the branch
+        """
+        project_id = check_type(project_id)
+        return helper(_add_query(urlbuilder(self._url[:-1], 'projects',
+                                                 project_id, 'repository',
+                                                 branch),
+                                 self._private_token))
+
+    def get_merge(self, project_id, sort='asc',
+                  order_by='created_at', state='all'):
+        """Gets list of merge requests.
+
+        Args:
+            project_id: id of the project.
+            sort: type of sorting, default ascending
+            order_by: ordering by created_at or updated_at fields.
+            state: type of merges  all, merged, opened or closed
+        """
+        query = {'private_token': self._private_token,
+                 'state': state,
+                 'order_by': order_by,
+                 'sort': sort}
+
+        url = urlbuilder(self._url[:-1], 'projects', project_id)
+        return helper(_add_query(url, self._private_token, query))
+
+    # Disabling too many args warning
+    # pylint: disable-msg=R0913
+    def get_project_issue(self, project_id, sort='asc', order_by='created_at',
+                          state='all', labels='', milestones=''):
+        """Gets list of merge requests.
+
+        Args:
+            project_id: id of the project.
+            sort: type of sorting, default ascending
+            order_by: ordering by created_at or updated_at fields.
+            state: state: opened/closed
+            labels: label of the issue
+            milestone: milestone title
+        """
+        query = {'private_token': self._private_token,
+                 'state': state,
+                 'order_by': order_by,
+                 'sort': sort,
+                 'labels': labels,
+                 'milestones': milestones}
+
+        url = urlbuilder(self._url[:-1], 'projects', project_id, 'issues')
+        return helper(_add_query(url, self._private_token, query))
+
+    def get_issue(self, sort='asc', order_by='created_at',
+                  state='all', labels=''):
+        """Gets list of merge requests.
+
+        Args:
+            sort: type of sorting, default ascending
+            order_by: ordering by created_at or updated_at fields.
+            state: opened/closed
+            labels: label of the issue
+        """
+        query = {'private_token': self._private_token,
+                 'state': state,
+                 'order_by': order_by,
+                 'sort': sort,
+                 'labels': labels}
+
+        return helper(_add_query(urlbuilder(self._url[:-1], 'issues'),
+                      self._private_token, query))
 
     def get_commit(self, project_id, commit_sha):
         """Gets commit info."""
