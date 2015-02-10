@@ -89,6 +89,19 @@ class GitlabApi(object):
                                      self._private_token))
         return None
 
+    def get_project_team_member(self, project_id, user_id):
+        """gets project team member.
+        Args:
+            project_id: id of the project
+            user_id: id of the user
+        """
+        project_id = check_type(project_id)
+        user_id = check_type(user_id)
+        return helper(_add_query(urlbuilder(self._url[:-1], 'projects',
+                                                 project_id, 'members',
+                                                 user_id),
+                                 self._private_token))
+
     def get_commit(self, project_id, commit_sha):
         """Gets commit info."""
         project_id = check_type(project_id)
