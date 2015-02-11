@@ -21,22 +21,22 @@ from sqlalchemy.ext.declarative import declarative_base
 
 DATABASE_URI = 'sqlite:////tmp/github.db'
 SECRET_KEY = 'development key'
+DEBUG = True
+
+GITHUB_CLIENT_ID = '5a80a178d27e64a4d264'
+GITHUB_CLIENT_SECRET = '243aa848374960e115494977cada492466f47902s'
+
 
 app = Flask(__name__)
 app.config.from_object(__name__)
 
-app.config['GITHUB_CLIENT_ID'] = 'XXX'
-app.config['GITHUB_CLIENT_SECRET'] = 'YYY'
-
-app.config['GITHUB_BASE_URL'] = 'https://HOSTNAME/api/v3/'
-app.config['GITHUB_AUTH_URL'] = 'https://HOSTNAME/login/oauth/'
 
 github = GitHub(app)
 
 engine = create_engine(app.config['DATABASE_URI'])
 db_session = scoped_session(sessionmaker(autocommit=False,
-autoflush=False,
-bind=engine))
+                                         autoflush=False,
+                                         bind=engine))
 Base = declarative_base()
 Base.query = db_session.query_property()
 
@@ -55,7 +55,7 @@ class User(Base):
     github_access_token = Column(String(200))
 
     def __init__(self, github_access_token):
-        self.github_access_token = github_access_token
+        self.github_access  _token = github_access_token
 
 @app.before_request
 def before_request():
