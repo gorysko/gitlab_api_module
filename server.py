@@ -7,7 +7,6 @@ from flask import request
 from flask import session
 from flask import g
 from flask import url_for
-from flask import jsonify
 from flask import redirect
 from flask.ext.github import GitHub
 
@@ -23,6 +22,11 @@ from sqlalchemy.ext.declarative import declarative_base
 
 
 SECRET_KEY = 'development key'
+DEBUG = True
+
+GITHUB_CLIENT_ID = '5a80a178d27e64a4d264'
+GITHUB_CLIENT_SECRET = '243aa848374960e115494977cada492466f47902s'
+
 
 app = Flask(__name__)
 app.config.from_object(__name__)
@@ -34,6 +38,7 @@ app.config['GITHUB_CLIENT_SECRET'] = '243aa848374960e115494977cada492466f47902'
 
 app.config['GITHUB_BASE_URL'] = 'https://api.github.com/'
 app.config['GITHUB_AUTH_URL'] = 'https://github.com/login/oauth/'
+
 
 github = GitHub(app)
 
@@ -97,6 +102,7 @@ def get():
                            branches=api.get_repo_info(repo, 'branches'),
                            contributors=api.get_repo_info(repo, 'contributors'))
 
+
 @app.route('/github-callback')
 @github.authorized_handler
 def authorized(access_token):
@@ -131,6 +137,7 @@ def logout():
 @app.route('/user')
 def user():
     return str(g.user_metada)
+
 
 def _init_api(user_name, api_url, git=True):
     if git:
