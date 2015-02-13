@@ -4,17 +4,9 @@
 
        <form action="stats" method="get">
          <p> Please enter your user</p>
-         <input type="text" name="user"  value="{{ user }}">
+         <input type="text" name="user"  value="{{ user.login }}">
          <p> Please enter your repo name</p>
          <input type="text" name="repo_name"  value="{{ repo_name }}">
-         <!--    <p>
-           <select name="info" value="{{ info }}">
-             <option value="contributors">Contributors</option>
-             <option value="languages">Languages</option>
-             <option value="branches">Branches</option>
-           </select>
-         </p>
-         -->
          <p><input type="submit" value="Get"/> <input type="reset" value="Clear"/></p>
        </form>
      </div>

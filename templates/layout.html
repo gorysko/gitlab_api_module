@@ -8,7 +8,7 @@
     <div class=flash>{{ message }}</div>
   {% endfor %}
   {% if user %}
-  	Hello! <a href="{{ url_for("user") }}">Get user</a> 
+  	Hello! <a href="{{ url_for("user") }}">User</a>
   	<a href="{{ url_for("logout") }}">Logout</a>
   	{% block body %}{% endblock %}
   {% else %}
