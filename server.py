@@ -81,7 +81,13 @@ def after_request(response):
 
 @app.route('/', methods=['GET'])
 def index(name=None):
-    return render_template('first.html', name=name, user=g.user_metada)
+    git = git_wapper.GithubApi(app.config['GITHUB_BASE_URL'],
+          g.user_metada['login'])
+    data = [('Repos', len(git.get_user_repos())),
+            ('Repos Watched', len(git.get_user_repos_watched())),
+            ('Gists', len(git.get_user_gists()))]
+    return render_template('first.html', data=data, name=name,
+                           user=g.user_metada)
 
 
 @github.access_token_getter
@@ -89,18 +95,6 @@ def token_getter():
     user = g.user_id
     if user is not None:
         return user.github_access_token
-
-
-@app.route('/stats', methods=['GET', 'POST'])
-def get():
-    user = request.args.get('user', '')
-    repo = request.args.get('repo_name', '')
-    api_url = request.args.get('api_url')
-    api = _init_api(user, api_url)
-    return render_template('stats.html', user=user, repo=repo,
-                           languages=api.get_repo_info(repo, 'languages'),
-                           branches=api.get_repo_info(repo, 'branches'),
-                           contributors=api.get_repo_info(repo, 'contributors'))
 
 
 @app.route('/github-callback')
