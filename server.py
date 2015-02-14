@@ -10,7 +10,7 @@ from flask import url_for
 from flask import redirect
 from flask.ext.github import GitHub
 
-from application import github as git_wapper
+from application import github as git_wrapper
 
 from sqlalchemy import create_engine
 from sqlalchemy import Column
@@ -69,10 +69,10 @@ class User(Base):
 @app.before_request
 def before_request():
     g.user_id = None
-    g.user_metada = None
+    g.user_metadata = None
     if 'user_id' in session:
         g.user_id = User.query.get(session['user_id'])
-        g.user_metada = github.get('user')
+        g.user_metadata = github.get('user')
 
 @app.after_request
 def after_request(response):
@@ -81,13 +81,15 @@ def after_request(response):
 
 @app.route('/', methods=['GET'])
 def index(name=None):
-    git = git_wapper.GithubApi(app.config['GITHUB_BASE_URL'],
-          g.user_metada['login'])
-    data = [('Repos', len(git.get_user_repos())),
-            ('Repos Watched', len(git.get_user_repos_watched())),
-            ('Gists', len(git.get_user_gists()))]
-    return render_template('first.html', data=data, name=name,
-                           user=g.user_metada)
+    data = []
+    user = {}
+    if g.user_metadata is not None:
+        git = git_wrapper.GithubApi(app.config['GITHUB_BASE_URL'],
+              g.user_metadata['login'])
+        data = [('Repos', len(git.get_user_repos())),
+                ('Repos Watched', len(git.get_user_repos_watched())),
+                ('Gists', len(git.get_user_gists()))]
+    return render_template('first.html', data=data, user=g.user_metadata)
 
 
 @github.access_token_getter
