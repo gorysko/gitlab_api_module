@@ -1,0 +1,59 @@
+#user {
+  background-color: #f4f0e4;
+  padding: 2em 0em;
+  display: block;
+}
+#user h1 {
+  margin-top: 0em;
+}
+#user .info span {
+  color: #dd0b79;
+  overflow: scroll;
+}
+/* line 105, ../sass/app.sass */
+#user #user-picture-column {
+  text-align: right;
+  float: right;
+}
+#user #user-picture {
+  border-radius: 10px;
+  width: 14.5em;
+  height: 14.5em;
+}
+#user #user-data-wrapper {
+  border-radius: 10px;
+  background-color: #4a404e;
+  color: #f4f0e4;
+  width: 100%;
+  padding: 1em;
+  margin: 1em 0em 0em 0em;
+}
+
+#user .row {
+    width: 100%;
+    margin: 0px auto;
+    max-width: 62.5rem;
+}
+
+#user .small-4 {
+  width: 33.33333%;
+  position: relative;
+  /*padding-left: 0.9375rem;*/
+  /*padding-right: 0.9375rem;*/
+  float: right;
+}
+
+#user .small-8 {
+  width: 66.66667%;
+  position: relative;
+  /*padding-left: 0.9375  rem;*/
+  /*padding-right: 0.937  5rem;*/
+  float: left;
+}
+
+#user img {
+    display: inline-block;
+    max-width: 100%;
+    border: 0px none;
+    vertical-align: middle;
+}
