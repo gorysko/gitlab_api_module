@@ -100,6 +100,10 @@ class GithubApi(object):
         """Gets user repos."""
         return helper(urlbuilder(self._url[:-1], 'users',
                                  self._user, 'repos'))
+        
+    def get_user_repos_names(self):
+        """Gets user repos name."""
+        return [item['name'] for item in self.get_user_repos()]
 
     def get_user_events(self):
         """Gets user events."""
@@ -137,6 +141,39 @@ class GithubApi(object):
             repo: repositiory name, as string
         """
         return helper(urlbuilder(self._url[:-1], 'repos', self._user, repo))
+
+    def get_user_repo_commits_sha(self, repo):
+        """Gets repository comits sha's by it's id.
+
+        Args:
+            repo: repositiory name, as string
+        """
+        return [item['sha'] for item in get_user_repo_commits(self, repo)]
+
+    def get_user_repo_commits(self, repo):
+        """Gets repository by it's id.
+
+        Args:
+            repo: repositiory name, as string
+        """
+        return helper(urlbuilder(self._url[:-1], 'repos', self._user, repo, 'commits'))
+
+    def get_user_repo_commit(self, repo, sha):
+        """Gets repository by it's id.
+
+        Args:
+            repo: repositiory name, as string
+            sha: commit sha, as string
+        """
+        return helper(urlbuilder(self._url[:-1], 'repos', self._user, repo, 'commits', sha))
+
+    def repos_commits(self):
+        """get repos and their commits"""
+        names = self.get_user_repos_names()
+        repos = {}
+        for name in names:
+            repos[name] = self.get_user_repo_commits_sha(name)
+        return repos
 
     def get_repo_info(self, repo, info='contributors'):
         """Gets repository contributors by repo id.

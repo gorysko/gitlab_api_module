@@ -82,6 +82,7 @@ def after_request(response):
 @app.route('/', methods=['GET'])
 def index(name=None):
     data = []
+    commits = []
     user = {}
     if g.user_metadata is not None:
         git = git_wrapper.GithubApi(app.config['GITHUB_BASE_URL'],
@@ -89,7 +90,10 @@ def index(name=None):
         data = [('Repos', len(git.get_user_repos())),
                 ('Repos Watched', len(git.get_user_repos_watched())),
                 ('Gists', len(git.get_user_gists()))]
-    return render_template('first.html', data=data, user=g.user_metadata)
+        repos = git.repos_commits()
+        for repo in repos:
+            commits.append(repo, len(repos[repo]))
+    return render_template('first.html', data=data, commits=commits, user=g.user_metadata)
 
 
 @github.access_token_getter
