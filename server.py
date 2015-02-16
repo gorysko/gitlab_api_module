@@ -89,8 +89,8 @@ def index(name=None):
               g.user_metadata['login'])
         repos = git.repos_commits()
         info = git.user_repo_info()
-        data = [('Repos', len(info[0]),
-                ('Repos Downloads', info[1],
+        data = [('Repos', len(info[0])),
+                ('Repos Downloads', info[1]),
                 ('Owner', info[2])]
         repos = git.repos_commits()
         for repo in repos:
