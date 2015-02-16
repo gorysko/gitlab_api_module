@@ -101,6 +101,13 @@ class GithubApi(object):
         return helper(urlbuilder(self._url[:-1], 'users',
                                  self._user, 'repos'))
         
+    def user_repo_info(self):
+        """info"""
+        repos = self.get_user_repos()
+        downloads = sum([item['has_downloads'] for item in repos])
+        owner = sum([item['owner']['login'] == self._user for item in repos])
+        return repos, downloads, owner
+
     def get_user_repos_names(self):
         """Gets user repos name."""
         return [item['name'] for item in self.get_user_repos()]
@@ -148,7 +155,7 @@ class GithubApi(object):
         Args:
             repo: repositiory name, as string
         """
-        return [item['sha'] for item in get_user_repo_commits(self, repo)]
+        return [item['sha'] for item in self.get_user_repo_commits(repo)]
 
     def get_user_repo_commits(self, repo):
         """Gets repository by it's id.

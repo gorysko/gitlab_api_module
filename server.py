@@ -87,12 +87,14 @@ def index(name=None):
     if g.user_metadata is not None:
         git = git_wrapper.GithubApi(app.config['GITHUB_BASE_URL'],
               g.user_metadata['login'])
-        data = [('Repos', len(git.get_user_repos())),
-                ('Repos Watched', len(git.get_user_repos_watched())),
-                ('Gists', len(git.get_user_gists()))]
+        repos = git.repos_commits()
+        info = git.user_repo_info()
+        data = [('Repos', len(info[0]),
+                ('Repos Downloads', info[1],
+                ('Owner', info[2])]
         repos = git.repos_commits()
         for repo in repos:
-            commits.append(repo, len(repos[repo]))
+            commits.append((repo, len(repos[repo])))
     return render_template('first.html', data=data, commits=commits, user=g.user_metadata)
 
 
