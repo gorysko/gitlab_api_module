@@ -31,24 +31,15 @@
                 ['{{ infoname }}', {{ num }}],
                 {%- endfor %}
         ]);
+
         var commits = new google.visualization.DataTable();
         commits.addColumn('string', 'Info');
         commits.addColumn('number', 'Number of items');
         commits.addRows([
-                // Instead of plugging in the values manually, or reading them
-                // from a Data Source like Google Spreadsheets, feed them in
-                // using Jinja, the templating system Flask uses.
-                // Each iteration evaluates to something like this:
-                // ['Saturday', 28],
                 {%- for infoname, num in commits %}
                 ['{{ infoname }}', {{ num }}],
                 {%- endfor %}
         ]);
-
-        // Instantiate and draw our chart, passing in some options.  All the
-        // options go into a single {}; some options' values go into a nested
-        // {}. Some values, such as colors, must be given as strings.  The
-        // Google Charts API is well-documented.
         var columnchart = new google.visualization.ColumnChart(
                 document.getElementById('columnchart_div'));
         var piechart = new google.visualization.PieChart(
