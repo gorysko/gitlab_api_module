@@ -4,7 +4,7 @@
 # https://developer.github.com/v3/
 
 """Github api module."""
-
+from application.utils import add_query
 from application.utils import check_type
 from application.utils import urlbuilder
 from application.utils import helper
@@ -12,7 +12,7 @@ from application.utils import helper
 class GithubApi(object):
     """github api class."""
 
-    def __init__(self, url, user):
+    def __init__(self, url, user, client_id, client_secret):
         """
         Args:
             user: user name, as string
@@ -20,6 +20,8 @@ class GithubApi(object):
         """
         self._url = url
         self._user = user
+        self._token = {'client_id': client_id, 'client_secret': client_secret}
+
 
     def get_orgs_events(self, org):
         """Gets lists of organization's events.
@@ -28,8 +30,8 @@ class GithubApi(object):
         """
         org_id = check_type(org)
 
-        return helper(urlbuilder(self._url[:-1], 'users', self._user,
-                                  'events', 'orgs', org_id))
+        return helper(add_query(urlbuilder(self._url[:-1], 'users', self._user,
+                                  'events', 'orgs', org_id), self._token))
 
     def get_org_members(self, org):
         """Get lists of organization's public events.
@@ -38,11 +40,13 @@ class GithubApi(object):
            org: user organization id,  as int.
         """
         org_id = check_type(org)
-        return helper(urlbuilder(self._url[:-1], 'orgs', org_id, 'events'))
+        return helper(add_query(urlbuilder(self._url[:-1], 'orgs',
+                      org_id, 'events'), self._token))
 
     def get_orgs(self):
         """Gets user organiztions."""
-        return helper(urlbuilder(self._url[:-1], 'users', self._user, 'orgs'))
+        return helper(add_query(urlbuilder(self._url[:-1], 'users',
+                      self._user, 'orgs'), self._token))
 
     def get_org_info(self, org, info=None):
         """Get organization members.
@@ -57,12 +61,12 @@ class GithubApi(object):
             url = urlbuilder(self._url[:-1], 'orgs', org_id, info)
         else:
             return None
-        return helper(url)
+        return helper(add_query(url, self._token))
 
     def get_orgs_membership(self):
         """Gets lists of user membership in organizations."""
-        return helper(urlbuilder(self._url[:-1], self._user,
-                                  'memberships', 'orgs'))
+        return helper(add_query(urlbuilder(self._url[:-1], self._user,
+                                  'memberships', 'orgs'), self._token))
 
     def get_team_info(self, org, team, info=None):
         """Gets team members.
@@ -81,7 +85,7 @@ class GithubApi(object):
                              team_id, info)
         else:
             return None
-        return helper(url)
+        return helper(add_query(url, self._token))
 
     def get_team(self, org, team):
         """Gets team by id.
@@ -93,20 +97,20 @@ class GithubApi(object):
         org_id = check_type(org)
         team_id = check_type(team)
 
-        return helper(urlbuilder(self._url[:-1], 'orgs', org_id,
-                                 'teams', team_id))
+        return helper(add_query(urlbuilder(self._url[:-1], 'orgs', org_id,
+                                 'teams', team_id), self._token))
 
     def get_user_repos(self):
         """Gets user repos."""
-        return helper(urlbuilder(self._url[:-1], 'users',
-                                 self._user, 'repos'))
-        
+        return helper(add_query(urlbuilder(self._url[:-1], 'users',
+                                 self._user, 'repos'), self._token))
+
     def user_repo_info(self):
         """info"""
         repos = self.get_user_repos()
-        downloads = sum([item['has_downloads'] for item in repos])
-        owner = sum([item['owner']['login'] == self._user for item in repos])
-        return repos, downloads, owner
+        forks = sum([item['forks'] for item in repos])
+        owner = sum([item['fork'] for item in repos])
+        return repos, forks, owner
 
     def get_user_repos_names(self):
         """Gets user repos name."""
@@ -114,23 +118,24 @@ class GithubApi(object):
 
     def get_user_events(self):
         """Gets user events."""
-        return helper(urlbuilder(self._url[:-1], 'users',
-                                 self._user, 'received_events'))
+        return helper(add_query(urlbuilder(self._url[:-1], 'users',
+                                 self._user, 'received_events'), self._token))
 
     def get_user_public_events(self):
         """Gets user public_events."""
-        return helper(urlbuilder(self._url[:-1], 'users',
-                                 self._user, 'received_events', 'public'))
+        return helper(add_query(urlbuilder(self._url[:-1], 'users',
+                                self._user, 'received_events', 'public'),
+                                self._token))
 
     def get_user_repos_watched(self):
         """Gets user repositories watched."""
-        return helper(urlbuilder(self._url[:-1], 'users',
-                                 self._user, 'subscriptions'))
+        return helper(add_query(urlbuilder(self._url[:-1], 'users',
+                                 self._user, 'subscriptions'), self._token))
 
     def get_user_gists(self):
         """Gets user gists."""
-        return helper(urlbuilder(self._url[:-1], 'users',
-                                 self._user, 'gists'))
+        return helper(add_query(urlbuilder(self._url[:-1], 'users',
+                                 self._user, 'gists'), self._token))
 
     def get_org_repos(self, org):
         """Gets org repos.
@@ -139,7 +144,8 @@ class GithubApi(object):
             org: organization id, as int.
         """
         org_id = check_type(org)
-        return helper(urlbuilder(self._url[:-1], 'org', org_id, 'repos'))
+        return helper(add_query(urlbuilder(self._url[:-1], 'org',
+                      org_id, 'repos'), self._token))
 
     def get_repo(self, repo):
         """Gets repository by it's id.
@@ -147,7 +153,8 @@ class GithubApi(object):
         Args:
             repo: repositiory name, as string
         """
-        return helper(urlbuilder(self._url[:-1], 'repos', self._user, repo))
+        return helper(add_query(urlbuilder(self._url[:-1], 'repos',
+                      self._user, repo), self._token))
 
     def get_user_repo_commits_sha(self, repo):
         """Gets repository comits sha's by it's id.
@@ -163,7 +170,8 @@ class GithubApi(object):
         Args:
             repo: repositiory name, as string
         """
-        return helper(urlbuilder(self._url[:-1], 'repos', self._user, repo, 'commits'))
+        return helper(add_query(urlbuilder(self._url[:-1], 'repos', self._user,
+                      repo, 'commits'), self._token))
 
     def get_user_repo_commit(self, repo, sha):
         """Gets repository by it's id.
@@ -172,7 +180,8 @@ class GithubApi(object):
             repo: repositiory name, as string
             sha: commit sha, as string
         """
-        return helper(urlbuilder(self._url[:-1], 'repos', self._user, repo, 'commits', sha))
+        return helper(add_query(urlbuilder(self._url[:-1], 'repos', self._user,
+                      repo, 'commits', sha), self._token))
 
     def repos_commits(self):
         """get repos and their commits"""
@@ -190,9 +199,9 @@ class GithubApi(object):
         """
         if info in ('contributors', 'languages', 'tags',
                     'branches', 'collaborators'):
-            return helper(urlbuilder(self._url[:-1], 'repos',
-                                     self._user, repo, info))
-        return None
+            return helper(add_query(urlbuilder(self._url[:-1], 'repos',
+                                     self._user, repo, info), self._token))
+        return []
 
     def get_repo_branch(self, repo, branch):
         """Gets repo branch by branch id.
@@ -201,8 +210,8 @@ class GithubApi(object):
             repo: repo name , as string.
             branch: branch name, as string.
         """
-        return helper(urlbuilder(self._url[:-1], 'repos',
-                                 self._user, repo, branch))
+        return helper(add_query(urlbuilder(self._url[:-1], 'repos',
+                                 self._user, repo, branch), self._token))
 
     def get_repo_collaborator(self, repo, info):
         """Gets repo collaborator.
@@ -212,9 +221,9 @@ class GithubApi(object):
         """
         if info in ('milestones', 'collaborators', 'events', 'subscribers',
             'issues', 'assignees', 'labels'):
-            return helper(urlbuilder(self._url[:-1], 'repos', self._user, repo,
-                                     info))
-        return None
+            return helper(add_query(urlbuilder(self._url[:-1], 'repos',
+                          self._user, repo, info), self._token))
+        return []
 
     def get_repo_issues_comments(self, repo):
         """Gets repository issues comments.
@@ -222,8 +231,9 @@ class GithubApi(object):
         Args:
             repo: repo name, as string.
         """
-        return helper(urlbuilder(self._url[:-1], 'repos',
-                                 self._user, repo, 'issues', 'comments'))
+        return helper(add_query(urlbuilder(self._url[:-1], 'repos',
+                                self._user, repo, 'issues', 'comments'),
+                                self._token))
 
     def get_repo_issue_info(self, repo, issue, info=None):
         """Gets repository issue comments.
@@ -235,9 +245,10 @@ class GithubApi(object):
 
         iss_id = check_type(issue)
         if info in ('comments', 'events', 'labels', 'events'):
-            return helper(urlbuilder(self._url[:-1], 'repos',
-                                     self._user, repo, 'issues', iss_id, info))
-        return None
+            return helper(add_query(urlbuilder(self._url[:-1], 'repos',
+                                    self._user, repo, 'issues', iss_id, info),
+                                    self._token))
+        return []
 
     def get_repo_issue_milestone_labels(self, repo, issue):
         """Gets repository issue milestone labels.
@@ -248,6 +259,6 @@ class GithubApi(object):
         """
 
         iss_id = check_type(issue)
-        return helper(urlbuilder(self._url[:-1], 'repos',
+        return helper(add_query(urlbuilder(self._url[:-1], 'repos',
                                  self._user, repo, 'milestone',
-                                 iss_id, 'labels'))
+                                 iss_id, 'labels'), self._token))

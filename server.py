@@ -83,19 +83,19 @@ def after_request(response):
 def index(name=None):
     data = []
     commits = []
-    user = {}
     if g.user_metadata is not None:
         git = git_wrapper.GithubApi(app.config['GITHUB_BASE_URL'],
-              g.user_metadata['login'])
+              g.user_metadata['login'], app.config['GITHUB_CLIENT_ID'],
+              app.config['GITHUB_CLIENT_SECRET'])
         repos = git.repos_commits()
         info = git.user_repo_info()
         data = [('Repos', len(info[0])),
-                ('Repos Downloads', info[1]),
-                ('Owner', info[2])]
-        repos = git.repos_commits()
+                ('Forks of user repos', info[1]),
+                ('User forked', info[2])]
         for repo in repos:
             commits.append((repo, len(repos[repo])))
-    return render_template('first.html', data=data, commits=commits, user=g.user_metadata)
+    return render_template('first.html', data=data, commits=commits,
+                           user=g.user_metadata)
 
 
 @github.access_token_getter
@@ -141,15 +141,6 @@ def user():
     return str(g.user_metada)
 
 
-def _init_api(user_name, api_url, git=True):
-    if git:
-        if api_url is None:
-            api_url = app.config['GITHUB_BASE_URL']
-        api = git_wapper.GithubApi(api_url, user_name)
-        return api
-    return None
-
-
 if __name__ == '__main__':
     init_db()
-    app.run(debug=True)
+    app.run()

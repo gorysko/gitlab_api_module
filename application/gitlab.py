@@ -4,9 +4,7 @@
 # http://doc.gitlab.com/ce/api/README.html
 
 """Gitlab api module"""
-
-from urllib import urlencode
-
+from application.utils import add_query
 from application.utils import check_type
 from application.utils import urlbuilder
 from application.utils import helper
@@ -20,7 +18,7 @@ class GitlabApi(object):
             private_token: gitlab private token, as string
             url: gitlab api url, should be ended by '/api/v3/'
         """
-        self._private_token = private_token
+        self._private_token = {'private_token': private_token}
         self._url = url
 
     # pylint: disable-msg=E1121
@@ -35,7 +33,7 @@ class GitlabApi(object):
         if owned:
             url = urlbuilder(url, 'owned')
 
-        return helper(_add_query(url, self._private_token, query))
+        return helper(add_query(url, self._private_token, query))
 
     def get_projects_ids(self):
         """Gets all project ids"""
@@ -45,13 +43,13 @@ class GitlabApi(object):
     def get_project(self, project_id):
         """Gets project by project id"""
         project_id = check_type(project_id)
-        return helper(_add_query(urlbuilder(self._url[:-1], 'projects',
+        return helper(add_query(urlbuilder(self._url[:-1], 'projects',
                                             project_id), self._private_token))
 
     def get_project_snippets(self, project_id):
         """Gets project snippets """
         project_id = check_type(project_id)
-        return helper(_add_query(urlbuilder(self._url[:-1], 'projects',
+        return helper(add_query(urlbuilder(self._url[:-1], 'projects',
                                                  project_id, 'snippets'),
                                  self._private_token))
 
@@ -64,7 +62,7 @@ class GitlabApi(object):
                          project_id, 'snippets', snippet_id)
         if raw:
             url = urlbuilder(url, 'raw')
-        return helper(_add_query(url, self._private_token))
+        return helper(add_query(url, self._private_token))
 
     def get_project_info(self, project_id, info=None):
         """Gets repos of the project
@@ -84,7 +82,7 @@ class GitlabApi(object):
 
         if info in keys:
             project_id = check_type(project_id)
-            return helper(_add_query(urlbuilder(self._url[:-1],
+            return helper(add_query(urlbuilder(self._url[:-1],
                                                       'projects',
                                                       project_id,
                                                       keys.get(info)),
@@ -99,7 +97,7 @@ class GitlabApi(object):
         """
         project_id = check_type(project_id)
         user_id = check_type(user_id)
-        return helper(_add_query(urlbuilder(self._url[:-1], 'projects',
+        return helper(add_query(urlbuilder(self._url[:-1], 'projects',
                                                  project_id, 'members',
                                                  user_id),
                                  self._private_token))
@@ -112,7 +110,7 @@ class GitlabApi(object):
             brnahc: name of the branch
         """
         project_id = check_type(project_id)
-        return helper(_add_query(urlbuilder(self._url[:-1], 'projects',
+        return helper(add_query(urlbuilder(self._url[:-1], 'projects',
                                                  project_id, 'repository',
                                                  branch),
                                  self._private_token))
@@ -133,7 +131,7 @@ class GitlabApi(object):
                  'sort': sort}
 
         url = urlbuilder(self._url[:-1], 'projects', project_id)
-        return helper(_add_query(url, self._private_token, query))
+        return helper(add_query(url, self._private_token, query))
 
     # Disabling too many args warning
     # pylint: disable-msg=R0913
@@ -157,7 +155,7 @@ class GitlabApi(object):
                  'milestones': milestones}
 
         url = urlbuilder(self._url[:-1], 'projects', project_id, 'issues')
-        return helper(_add_query(url, self._private_token, query))
+        return helper(add_query(url, self._private_token, query))
 
     def get_issue(self, sort='asc', order_by='created_at',
                   state='all', labels=''):
@@ -175,13 +173,13 @@ class GitlabApi(object):
                  'sort': sort,
                  'labels': labels}
 
-        return helper(_add_query(urlbuilder(self._url[:-1], 'issues'),
+        return helper(add_query(urlbuilder(self._url[:-1], 'issues'),
                       self._private_token, query))
 
     def get_commit(self, project_id, commit_sha):
         """Gets commit info."""
         project_id = check_type(project_id)
-        return helper(_add_query(urlbuilder(self._url[:-1], 'projects',
+        return helper(add_query(urlbuilder(self._url[:-1], 'projects',
                                                  project_id, 'repository',
                                                  'commits', commit_sha),
                                  self._private_token))
@@ -189,52 +187,38 @@ class GitlabApi(object):
     def get_events(self, project_id):
         """Get project events by project_id"""
         project_id = check_type(project_id)
-        return helper(_add_query(urlbuilder(self._url[:-1], 'projects',
+        return helper(add_query(urlbuilder(self._url[:-1], 'projects',
                                                  project_id, 'events'),
                                  self._private_token))
 
     def get_members(self, project_id):
         """gets project members by project_id"""
         project_id = check_type(project_id)
-        return helper(_add_query(urlbuilder(self._url[:-1],
+        return helper(add_query(urlbuilder(self._url[:-1],
                                                  'projects', project_id,
                                                  'members'),
                                  self._private_token))
 
     def users(self):
         """Gets list of users"""
-        return helper(_add_query(urlbuilder(self._url[:-1], 'users'),
+        return helper(add_query(urlbuilder(self._url[:-1], 'users'),
                                  self._private_token))
 
     def keys(self):
         """Gets list of users"""
-        return helper(_add_query(urlbuilder(self._url[:-1], 'users', 'keys'),
+        return helper(add_query(urlbuilder(self._url[:-1], 'users', 'keys'),
                                  self._private_token))
 
     def get_user(self, user_id):
         """Gets user by it's id"""
         user_id = check_type(user_id)
-        return helper(_add_query(urlbuilder(self._url[:-1],
+        return helper(add_query(urlbuilder(self._url[:-1],
                                                  'users', user_id),
                                  self._private_token))
 
     def get_user_keys(self, user_id):
         """Gets user ssh keys"""
         user_id = check_type(user_id)
-        return helper(_add_query(urlbuilder(self._url[:-1],
+        return helper(add_query(urlbuilder(self._url[:-1],
                                                  'users', user_id, 'keys'),
                                  self._private_token))
-
-
-
-
-def _add_query(url, private_token, data=None):
-    """Adds query to url"""
-    if url is not None:
-        token = {'private_token': private_token}
-        if data is None:
-            data = {}
-        data.update(token)
-        query = urlencode(data)
-        return url + '?' + query
-    return ''

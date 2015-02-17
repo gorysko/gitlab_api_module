@@ -2,6 +2,7 @@
 
 """Additional utils for correct work."""
 from json import loads
+from urllib import urlencode
 from urllib2 import urlopen
 
 def return_result(response):
@@ -27,7 +28,19 @@ def urlbuilder(*args):
 
 def helper(url):
     """helper"""
-    response = urlopen(url)
-    if response is not None:
-        return return_result(response)
-    return None
+    try:
+        response = urlopen(url)
+        if response is not None:
+            return return_result(response)
+    except:
+        return []
+
+def add_query(url, token, data=None):
+    """Adds query to url"""
+    if url is not None:
+        if data is None:
+            data = {}
+        data.update(token)
+        query = urlencode(data)
+        return url + '?' + query
+    return ''
