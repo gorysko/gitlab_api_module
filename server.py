@@ -33,11 +33,11 @@ GITHUB_CLIENT_SECRET = '243aa848374960e115494977cada492466f47902s'
 app = Flask(__name__)
 app.config.from_object(__name__)
 
-# app.config['DATABASE_URI'] = 'sqlite:////tmp/github.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/github.db'
 
 
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
-db = SQLAlchemy(app)
+# app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
+# db = SQLAlchemy(app)
 
 app.config['GITHUB_CLIENT_ID'] = '5a80a178d27e64a4d264'
 app.config['GITHUB_CLIENT_SECRET'] = '243aa848374960e115494977cada492466f47902'
