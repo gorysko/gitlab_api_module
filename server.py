@@ -87,13 +87,13 @@ def index(name=None):
         git = git_wrapper.GithubApi(app.config['GITHUB_BASE_URL'],
               g.user_metadata['login'], app.config['GITHUB_CLIENT_ID'],
               app.config['GITHUB_CLIENT_SECRET'])
-        repos = git.repos_commits()
+        repo_commits = git.commits_by_repo()
         info = git.user_repo_info()
         data = [('Repos', len(info[0])),
                 ('Forks of user repos', info[1]),
                 ('User forked', info[2])]
-        for repo in repos:
-            commits.append((repo, len(repos[repo])))
+        for repo in repo_commits:
+            commits.append((repo, repo_commits[repo]))
     return render_template('first.html', data=data, commits=commits,
                            user=g.user_metadata)
 

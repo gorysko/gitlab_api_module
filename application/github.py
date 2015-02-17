@@ -103,7 +103,7 @@ class GithubApi(object):
     def get_user_repos(self):
         """Gets user repos."""
         return helper(add_query(urlbuilder(self._url[:-1], 'users',
-                                 self._user, 'repos'), self._token))
+                                self._user, 'repos'), self._token))
 
     def user_repo_info(self):
         """info"""
@@ -171,7 +171,7 @@ class GithubApi(object):
             repo: repositiory name, as string
         """
         return helper(add_query(urlbuilder(self._url[:-1], 'repos', self._user,
-                      repo, 'commits'), self._token))
+                      repo, 'commits'), self._token, {'per_page': 10000}))
 
     def get_user_repo_commit(self, repo, sha):
         """Gets repository by it's id.
@@ -185,11 +185,32 @@ class GithubApi(object):
 
     def repos_commits(self):
         """get repos and their commits"""
-        names = self.get_user_repos_names()
         repos = {}
-        for name in names:
+        for name in self.get_user_repos_names():
             repos[name] = self.get_user_repo_commits_sha(name)
         return repos
+
+    def repo_stats(self, repo, info='contributors'):
+        """Gets repository by it's id.
+
+        Args:
+            repo: repositiory name, as string
+        """
+        if info in ('contributors', 'commit_activity', 'code_frequency',
+                    'participation', 'punch_card'):
+            return helper(add_query(urlbuilder(self._url[:-1],
+                          'repos', self._user, repo, 'stats', info),
+                          self._token))
+        return []
+
+    def commits_by_repo(self):
+        """gets commits quanteti by repo"""
+        commits = {}
+        for name in self.get_user_repos_names():
+            participation = self.repo_stats(repo=name, info='participation')
+            if participation != []:
+                commits[name] = sum(participation['owner'])
+        return commits
 
     def get_repo_info(self, repo, info='contributors'):
         """Gets repository contributors by repo id.
