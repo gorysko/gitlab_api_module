@@ -48,7 +48,7 @@ app.config['GITHUB_AUTH_URL'] = 'https://github.com/login/oauth/'
 
 github = GitHub(app)
 
-engine = create_engine(app.config['DATABASE_URI'])
+engine = create_engine(app.config['SQLALCHEMY_DATABASE_URI'])
 db_session = scoped_session(sessionmaker(autocommit=False,
                                          autoflush=False,
                                          bind=engine))
