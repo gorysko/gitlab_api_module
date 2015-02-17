@@ -9,6 +9,7 @@ from flask import g
 from flask import url_for
 from flask import redirect
 from flask.ext.github import GitHub
+from flask.ext.sqlalchemy import SQLAlchemy
 
 from application import github as git_wrapper
 
@@ -31,7 +32,11 @@ GITHUB_CLIENT_SECRET = '243aa848374960e115494977cada492466f47902s'
 app = Flask(__name__)
 app.config.from_object(__name__)
 
-app.config['DATABASE_URI'] = 'sqlite:///github.db'
+# app.config['DATABASE_URI'] = 'sqlite:////tmp/github.db'
+
+
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
+db = SQLAlchemy(app)
 
 app.config['GITHUB_CLIENT_ID'] = '5a80a178d27e64a4d264'
 app.config['GITHUB_CLIENT_SECRET'] = '243aa848374960e115494977cada492466f47902'
@@ -49,7 +54,10 @@ db_session = scoped_session(sessionmaker(autocommit=False,
 Base = declarative_base()
 Base.query = db_session.query_property()
 
-Base.metadata.create_all(bind=engine)
+
+def init_db():
+    """init database."""
+    Base.metadata.create_all(bind=engine)
 
 
 class User(Base):
@@ -137,3 +145,7 @@ def logout():
 def user():
     return str(g.user_metada)
 
+
+if __name__ == '__main__':
+    init_db()
+    app.run(port=80)
