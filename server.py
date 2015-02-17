@@ -1,5 +1,6 @@
 #! /usr/bin/env python
 """Server module, based on flask."""
+import os
 
 from flask import Flask
 from flask import render_template
