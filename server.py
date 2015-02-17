@@ -149,4 +149,4 @@ def user():
 
 if __name__ == '__main__':
     init_db()
-    app.run(port=80)
+    app.run()
