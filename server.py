@@ -49,10 +49,7 @@ db_session = scoped_session(sessionmaker(autocommit=False,
 Base = declarative_base()
 Base.query = db_session.query_property()
 
-
-def init_db():
-    """init database."""
-    Base.metadata.create_all(bind=engine)
+Base.metadata.create_all(bind=engine)
 
 
 class User(Base):
@@ -140,7 +137,3 @@ def logout():
 def user():
     return str(g.user_metada)
 
-
-if __name__ == '__main__':
-    init_db()
-    app.run()
