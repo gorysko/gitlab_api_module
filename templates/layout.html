@@ -5,14 +5,14 @@
     <title>Google Charts with Flask</title>
     <script type="text/javascript" src="https://www.google.com/jsapi"></script>
     <script type="text/javascript">
-    
+
       // Load the Visualization API and the ColumnChart package.
       google.load('visualization', '1', {'packages':['corechart']});
-      
+
       // Set a callback to run when the Google Visualization API is loaded.
       google.setOnLoadCallback(drawChart);
-      
-      // Callback that creates and populates a data table, 
+
+      // Callback that creates and populates a data table,
       // instantiates the pie chart, passes in the data and
       // draws it.
       function drawChart() {
@@ -54,30 +54,11 @@
         var piechart = new google.visualization.PieChart(
                 document.getElementById('piechart_div'));
         columnchart.draw(data, {legend: 'none', vAxis: {baseline: 0},
-                colors: ['#A0D100']});
+                colors: ['#dd0b79']});
         piechart.draw(commits, {legend: 'none', vAxis: {baseline: 0},
-                colors: ['#A0D100']});
+                colors: ['#dd0b79']});
       }
     </script>
-
-    <style>
-        #content {
-            width: 80%;
-            height: 60%;
-            min-width: 800px;
-
-            /* Center the div. */
-            margin-right: auto;
-            margin-left: auto;
-
-            color: #A0D100;
-            text-align: center;
-        }
-
-        #chart_div {
-            min-height: 400px;
-        }
-    </style>
 </head>
 	<div class=page>
       <h1>Git stats</h1>

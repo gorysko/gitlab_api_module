@@ -57,3 +57,24 @@
     border: 0px none;
     vertical-align: middle;
 }
+
+#content {
+    width: 80%;
+    height: 60%;
+    min-width: 800px;
+
+    /* Center the div. */
+    margin-right: auto;
+    margin-left: auto;
+
+    color: #A0D100;
+    text-align: center;
+}
+
+#columnchart_div {
+    min-height: 400px;
+}
+
+#piechart_div {
+    min-height: 400px;
+}
