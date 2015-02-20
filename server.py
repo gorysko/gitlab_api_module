@@ -52,8 +52,8 @@ app.config['GITHUB_AUTH_URL'] = 'https://github.com/login/oauth/'
 github = GitHub(app)
 
 engine = create_engine(app.config['SQLALCHEMY_DATABASE_URI'])
-db_session = scoped_session(sessionmaker(autocommit=True,
-                                         autoflush=True,
+db_session = scoped_session(sessionmaker(autocommit=False,
+                                         autoflush=False,
                                          bind=engine))
 Base = declarative_base()
 Base.query = db_session.query_property()
@@ -99,15 +99,13 @@ def index(name=None):
         git = git_wrapper.GithubApi(app.config['GITHUB_BASE_URL'],
               g.user_metadata['login'], app.config['GITHUB_CLIENT_ID'],
               app.config['GITHUB_CLIENT_SECRET'])
-        db_session.begin()
-        if g.user_id.repo_commits is not None:
+        if g.user_id.repo_commits is not None and \
+            g.user_id.user_repo_info is not None:
             repo_commits = loads(g.user_id.repo_commits)
+            info = loads(g.user_id.user_repo_info)
         else:
             repo_commits = git.commits_by_repo()
             g.user_id.repo_commits = dumps(repo_commits)
-        if g.user_id.user_repo_info is not None:
-            info = loads(g.user_id.user_repo_info)
-        else:
             info = git.user_repo_info()
             g.user_id.user_repo_info = dumps(info)
         db_session.commit()
@@ -134,7 +132,6 @@ def authorized(access_token):
     if access_token is None:
         return redirect(next_url)
     user = User.query.filter_by(github_access_token=access_token).first()
-    db_session.begin()
     if user is None:
         user = User(access_token)
         db_session.add(user)
