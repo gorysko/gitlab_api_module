@@ -84,7 +84,6 @@ def before_request():
     g.user_metadata = None
     if 'user_id' in session:
         g.user_id = User.query.get(session['user_id'])
-        print g.user_id.__dict__
         g.user_metadata = github.get('user')
 
 @app.after_request
@@ -100,6 +99,7 @@ def index(name=None):
         git = git_wrapper.GithubApi(app.config['GITHUB_BASE_URL'],
               g.user_metadata['login'], app.config['GITHUB_CLIENT_ID'],
               app.config['GITHUB_CLIENT_SECRET'])
+        db_session.begin()
         if g.user_id.repo_commits is not None:
             repo_commits = loads(g.user_id.repo_commits)
         else:
@@ -134,6 +134,7 @@ def authorized(access_token):
     if access_token is None:
         return redirect(next_url)
     user = User.query.filter_by(github_access_token=access_token).first()
+    db_session.begin()
     if user is None:
         user = User(access_token)
         db_session.add(user)
