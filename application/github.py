@@ -209,7 +209,7 @@ class GithubApi(object):
         for name in self.get_user_repos_names():
             participation = self.repo_stats(repo=name, info='participation')
             if participation != []:
-                commits[name] = sum(participation['owner'])
+                commits[name] = sum(participation.get('owner', [0]))
         return commits
 
     def get_repo_info(self, repo, info='contributors'):

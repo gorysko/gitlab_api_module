@@ -2,6 +2,9 @@
 """Server module, based on flask."""
 import os
 
+from json import dumps
+from json import loads
+
 from flask import Flask
 from flask import render_template
 from flask import request
@@ -33,7 +36,7 @@ GITHUB_CLIENT_SECRET = '243aa848374960e115494977cada492466f47902s'
 app = Flask(__name__)
 app.config.from_object(__name__)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/github.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///github.db'
 
 
 # app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
@@ -49,8 +52,8 @@ app.config['GITHUB_AUTH_URL'] = 'https://github.com/login/oauth/'
 github = GitHub(app)
 
 engine = create_engine(app.config['SQLALCHEMY_DATABASE_URI'])
-db_session = scoped_session(sessionmaker(autocommit=False,
-                                         autoflush=False,
+db_session = scoped_session(sessionmaker(autocommit=True,
+                                         autoflush=True,
                                          bind=engine))
 Base = declarative_base()
 Base.query = db_session.query_property()
@@ -58,7 +61,7 @@ Base.query = db_session.query_property()
 
 def init_db():
     """init database."""
-    Base.metadata.create_all(bind=engine)
+    Base.metadata.create_all(engine)
 
 
 class User(Base):
@@ -66,8 +69,11 @@ class User(Base):
     __tablename__ = 'users'
 
     id = Column(Integer, primary_key=True)
-    username = Column(String(200))
-    github_access_token = Column(String(200))
+    username = Column(String)
+    github_access_token = Column(String)
+    user_repo_info = Column(String)
+    repo_commits = Column(String)
+
 
     def __init__(self, github_access_token):
         self.github_access_token = github_access_token
@@ -78,6 +84,7 @@ def before_request():
     g.user_metadata = None
     if 'user_id' in session:
         g.user_id = User.query.get(session['user_id'])
+        print g.user_id.__dict__
         g.user_metadata = github.get('user')
 
 @app.after_request
@@ -93,8 +100,17 @@ def index(name=None):
         git = git_wrapper.GithubApi(app.config['GITHUB_BASE_URL'],
               g.user_metadata['login'], app.config['GITHUB_CLIENT_ID'],
               app.config['GITHUB_CLIENT_SECRET'])
-        repo_commits = git.commits_by_repo()
-        info = git.user_repo_info()
+        if g.user_id.repo_commits is not None:
+            repo_commits = loads(g.user_id.repo_commits)
+        else:
+            repo_commits = git.commits_by_repo()
+            g.user_id.repo_commits = dumps(repo_commits)
+        if g.user_id.user_repo_info is not None:
+            info = loads(g.user_id.user_repo_info)
+        else:
+            info = git.user_repo_info()
+            g.user_id.user_repo_info = dumps(info)
+        db_session.commit()
         data = [('Repos', len(info[0])),
                 ('Forks of user repos', info[1]),
                 ('User forked', info[2])]
