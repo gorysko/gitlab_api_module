@@ -3,29 +3,7 @@
 	<title>Git Stats</title>
     <link rel="stylesheet" href="/static/css/style.css" />
     <title>Google Charts with Flask</title>
-    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
-    <script type="text/javascript">
-      google.load('visualization', '1', {'packages':['corechart']});
-
-      google.setOnLoadCallback(drawChart);
-
-      function drawChart() {
-        var data = google.visualization.arrayToDataTable({{ data|tojson }}, false);
-        var commits = google.visualization.arrayToDataTable({{ commits|tojson }}, false);
-        var deletes = google.visualization.arrayToDataTable({{ deletions|tojson }});
-
-        var columnchart = new google.visualization.BarChart(
-                document.getElementById('columnchart_div'));
-        var donutchart = new google.visualization.PieChart(
-                document.getElementById('donut_div'));
-        var deletionchart = new google.visualization.BarChart(
-                document.getElementById('deletionchart_div'));
-
-        columnchart.draw(data, {vAxis: {baseline: 0}});
-        donutchart.draw(commits, {vAxis: {baseline: 0}, pieHole: 0.4});
-        deletionchart.draw(deletes, {vAxis: {baseline: 0}});
-      }
-    </script>
+  {% block head %} {% endblock %}
 </head>
 	<div class=page>
       <h1>Git stats</h1>
@@ -52,17 +30,9 @@
             </li>
           {% endif %}
         </ul>
-          {% for message in get_flashed_messages() %}
-            <div class=flash>{{ message }}</div>
-          {% endfor %}
-          {% if user %}
-          	<div id="user" class="{{ 'hidden' if not user }}">
-              <div id="user-picture-column" class="small-4 columns">
-                <img id="user-picture" src="{{ user['avatar_url'] if user }}" />
-              </div>
-            </div>
-          	{% block body %}{% endblock %}
-          {% endif %}
+        {% for message in get_flashed_messages() %}
+          <div class=flash>{{ message }}</div>
+        {% endfor %}
 	  </div>
 	</div>
-</head>
+  {% block body %}{% endblock %}
