@@ -105,7 +105,9 @@ def index(name=None):
               app.config['GITHUB_CLIENT_SECRET'])
 
         if g.user_id.repo_commits is not None and \
-            g.user_id.user_repo_info is not None and g.user_id.deletions is not None:
+            g.user_id.user_repo_info is not None and \
+            g.user_id.deletions is not None:
+
             repo_commits = loads(g.user_id.repo_commits)
             info = loads(g.user_id.user_repo_info)
             deletions = loads(g.user_id.deletions)
@@ -115,7 +117,7 @@ def index(name=None):
             info = git.user_repo_info()
             g.user_id.user_repo_info = dumps(info)
             deletions = git.get_deletions()
-            g.user_id.deletions = deletions
+            g.user_id.deletions = dumps(deletions)
 
         db_session.commit()
 
