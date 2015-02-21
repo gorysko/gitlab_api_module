@@ -92,8 +92,14 @@ def after_request(response):
     db_session.remove()
     return response
 
+
 @app.route('/', methods=['GET'])
 def index(name=None):
+    return render_template('index.html', user=g.user_metadata)
+
+
+@app.route('/stats', methods=['GET'])
+def stats(name=None):
     data = [['Type of repos', 'Number of items']]
     commits = [['Repo name', 'Number of commits']]
     deletions = []
@@ -127,7 +133,7 @@ def index(name=None):
         for repo in repo_commits:
             commits.append([repo, repo_commits[repo]])
         total_commits = sum([i[1] for i in commits[1:]])
-    return render_template('first.html', data=data, commits=commits,
+    return render_template('stats.html', data=data, commits=commits,
                            user=g.user_metadata, total_commits=total_commits,
                            deletions=deletions)
 
