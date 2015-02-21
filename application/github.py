@@ -4,6 +4,8 @@
 # https://developer.github.com/v3/
 
 """Github api module."""
+from math import log
+
 from application.utils import add_query
 from application.utils import check_type
 from application.utils import urlbuilder
@@ -213,8 +215,8 @@ class GithubApi(object):
                     deletion = 0
                     additon = 0
                     for item in  author['weeks']:
-                        deletion += item['d']
-                        additon += item['a']
+                        deletion += log(int(item['d']))
+                        additon += log((item['a']))
                     deletions.append([name, additon, deletion])
         return deletions
 
