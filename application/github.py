@@ -203,6 +203,22 @@ class GithubApi(object):
                           self._token))
         return []
 
+
+    def get_deletions(self):
+        """Gets number of deletions and additons by repo"""
+        deletions = ['Repo', 'Additons', 'Deletions']
+        for name in self.get_user_repos_names():
+            contrib = self.repo_stats(repo=name)
+            for author in contrib:
+                if author['author']['login'] == self._user:
+                    deletion = 0
+                    additon = 0
+                    for item in  author['weeks']:
+                        deletion += item['d']
+                        additon += item['a']
+                    deletions.append([name, additon, deletion])
+        return deletions
+
     def commits_by_repo(self):
         """gets commits quanteti by repo"""
         commits = {}
