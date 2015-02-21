@@ -5,7 +5,7 @@
     <title>Google Charts with Flask</title>
     <script type="text/javascript" src="https://www.google.com/jsapi"></script>
     <script type="text/javascript">
-      google.load('visualization', '1', {'packages':['corechart', 'treemap']});
+      google.load('visualization', '1', {'packages':['corechart']});
 
       google.setOnLoadCallback(drawChart);
 
@@ -18,19 +18,12 @@
                 document.getElementById('columnchart_div'));
         var donutchart = new google.visualization.PieChart(
                 document.getElementById('donut_div'));
-        var deletionchart = new google.visualization.TreeMap(
+        var deletionchart = new google.visualization.BarChart(
                 document.getElementById('deletionchart_div'));
 
         columnchart.draw(data, {vAxis: {baseline: 0}});
         donutchart.draw(commits, {vAxis: {baseline: 0}, pieHole: 0.4});
-        deletionchart.draw(deletes, {
-          minColor: '#f00',
-          midColor: '#ddd',
-          maxColor: '#0d0',
-          headerHeight: 15,
-          fontColor: 'black',
-          showScale: true
-        });
+        deletionchart.draw(deletes, {vAxis: {baseline: 0}});
       }
     </script>
 </head>
