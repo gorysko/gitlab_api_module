@@ -93,8 +93,8 @@ def after_request(response):
 
 @app.route('/', methods=['GET'])
 def index(name=None):
-    data = []
-    commits = []
+    data = [['Type of repos', 'Number of items']]
+    commits = [['Repo name', 'Number of commits']]
     if g.user_metadata is not None:
         git = git_wrapper.GithubApi(app.config['GITHUB_BASE_URL'],
               g.user_metadata['login'], app.config['GITHUB_CLIENT_ID'],
@@ -109,11 +109,11 @@ def index(name=None):
             info = git.user_repo_info()
             g.user_id.user_repo_info = dumps(info)
         db_session.commit()
-        data = [('Repos', len(info[0])),
-                ('Forks of user repos', info[1]),
-                ('User forked', info[2])]
+        data.extend([['Repos', len(info[0])],
+                ['Forks of user repos', info[1]],
+                ['User forked', info[2]]])
         for repo in repo_commits:
-            commits.append((repo, repo_commits[repo]))
+            commits.append([repo, repo_commits[repo]])
     return render_template('first.html', data=data, commits=commits,
                            user=g.user_metadata)
 

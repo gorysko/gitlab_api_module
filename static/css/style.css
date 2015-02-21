@@ -73,6 +73,8 @@
     min-height: 400px;
 }
 
-#piechart_div {
-    min-height: 400px;
+#donut_div {
+    width: 900px;
+    height: 500px;
+    text-align: center;
 }
