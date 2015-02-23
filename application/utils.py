@@ -42,5 +42,6 @@ def add_query(url, token, data=None):
             data = {}
         data.update(token)
         query = urlencode(data)
+        print url + '?' + query
         return url + '?' + query
     return ''

@@ -10,14 +10,7 @@
       <div class="metanav">
         <ul><li><a href="{{ url_for("index") }}">Home</a></li>
           <li>About</li>  
-          <li>
-            Portfolio
-            <ul>
-              <li>Web Design</li>
-              <li>Web Development</li>
-            </ul>
-          </li>
-          <li>Blog</li>
+          <li>How</li>
           {% if not user %}
             <li><a href="{{ url_for("login") }}">Login</a></li>
           {% else %}

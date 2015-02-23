@@ -215,8 +215,11 @@ class GithubApi(object):
                     deletion = 0
                     additon = 0
                     for item in  author['weeks']:
-                        deletion += log(int(item['d']))
-                        additon += log((item['a']))
+                        print name
+                        print int(item['d'])
+                        print int(item['a'])
+                        deletion += log(int(item['d']) + 1)
+                        additon += log((item['a']) + 1)
                     deletions.append([name, additon, deletion])
         return deletions
 
