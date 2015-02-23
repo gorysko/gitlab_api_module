@@ -28,10 +28,10 @@
           {% if not user %}
             <li><a href="{{ url_for("login") }}">Login</a></li>
           {% else %}
-            <!-- <li><a href="{{ url_for("stats") }}">Statistic</a></li> -->
             <li>
               {{ user['name'] }}
               <ul>
+                <li><a href="{{ url_for("stats") }}">Statistic</a></li>
                 <li><a href="{{ url_for("logout") }}">Logout</a></li>
               </ul>
             </li>

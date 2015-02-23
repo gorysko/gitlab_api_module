@@ -18,9 +18,9 @@
         var deletionchart = new google.visualization.BarChart(
                 document.getElementById('deletionchart_div'));
 
-        columnchart.draw(data, {vAxis: {baseline: 0}});
-        donutchart.draw(commits, {vAxis: {baseline: 0}, pieHole: 0.4});
-        deletionchart.draw(deletes, {vAxis: {baseline: 0}});
+        columnchart.draw(data, {vAxis: {baseline: 0}, backgroundColor: { fill:'transparent' }});
+        donutchart.draw(commits, {vAxis: {baseline: 0}, pieHole: 0.4, backgroundColor: { fill:'transparent' }});
+        deletionchart.draw(deletes, {vAxis: {baseline: 0}, backgroundColor: { fill:'transparent' }});
       }
     </script>
 {% endblock %}
