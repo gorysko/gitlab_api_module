@@ -1,12 +1,11 @@
 {% extends "layout.html" %}
 {% block body %}
 {% for page in posts %}
-  {% print page %}
   <div class='post'>
   <a href="/{{page.path}}"><h1>{{ page.meta.title }}</h1></a>
     {% if page.meta.type == 'post' %}
     <span class="date">{{ page.meta.date.strftime("%b %e, %Y")}}</span>
-    {{page}}
+    {{ page.body[:100] + '...'}}
     {% endif %}
   </div>
 {% endfor %}
