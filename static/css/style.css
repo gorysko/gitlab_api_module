@@ -3,7 +3,7 @@ body {
   padding: 20px 50px 150px;
   font-size: 13px;
   text-align: center;
-  background: #E3CAA1;
+  background-image: url('http://drsilkroad.com/wp-content/uploads/sunset-straight-road.jpg');
 }
 
 #user {
@@ -64,10 +64,10 @@ body {
   background: #fff;
   cursor: pointer;
   -webkit-transition: all 0.2s;
-  -moz-transition: all 0.2s;
+  /*-moz-transition: all 0.2s;*/
   -ms-transition: all 0.2s;
-  -o-transition: all 0.2s;
-  transition: all 0.2s;
+  /*-o-transition: all 0.2s;*/
+  /*transition: all 0.2s;*/
 }
 .metanav ul li:hover {
   background: #555;
@@ -75,10 +75,11 @@ body {
 }
 .metanav ul li ul {
   padding: 0;
-  position: absolute;
+  /*position: absolute;*/
   top: 48px;
-  left: 0;
-  width: 150px;
+  /*left: 0;*/  
+  /*width: 150px;*/
+  text-align: center;
   -webkit-box-shadow: none;
   -moz-box-shadow: none;
   box-shadow: none;
@@ -97,10 +98,10 @@ body {
   color: #fff;
   text-shadow: 0 -1px 0 #000;
 }
-.metanav ul li ul li:hover { 
+/*.metanav ul li ul li:hover { 
   background: #666;
 }
-
+*/
 .metanav ul li:hover ul {
   display: block;
   opacity: 1;

@@ -15,19 +15,20 @@
 
       </pre>
       <div class="metanav">
-        <ul><li><a href="{{ url_for("index") }}">Home</a></li>
-          <li>
+        <ul>
+        <!-- <li><a href="{{ url_for("index") }}">Home</a></li> -->
+<!--           <li>
             Projects
             <ul>
               <li><a href="#" >Project1</li>
               <li><a href="#" >Project2</li>
             </ul>
-          </li>
-          <li><a href="{{ url_for("blog") }}">Blog</a></li>
+          </li> -->
+          <!-- <li><a href="{{ url_for("blog") }}">Blog</a></li> -->
           {% if not user %}
             <li><a href="{{ url_for("login") }}">Login</a></li>
           {% else %}
-            <li><a href="{{ url_for("stats") }}">Statistic</a></li>
+            <!-- <li><a href="{{ url_for("stats") }}">Statistic</a></li> -->
             <li>
               {{ user['name'] }}
               <ul>
