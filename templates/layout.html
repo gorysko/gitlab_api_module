@@ -5,12 +5,25 @@
     <title>Google Charts with Flask</title>
   {% block head %} {% endblock %}
 </head>
+<body>
 	<div class=page>
-      <h1>Git stats</h1>
+      <pre>
+ _____ _____ _____    _____ _____ _____ _____ _____
+|   __|     |_   _|  |   __|_   _|  _  |_   _|   __|
+|  |  |-   -| | |    |__   | | | |     | | | |__   |
+|_____|_____| |_|    |_____| |_| |__|__| |_| |_____|
+
+      </pre>
       <div class="metanav">
         <ul><li><a href="{{ url_for("index") }}">Home</a></li>
-          <li>About</li>  
-          <li>How</li>
+          <li>
+            Projects
+            <ul>
+              <li><a href="#" >Project1</li>
+              <li><a href="#" >Project2</li>
+            </ul>
+          </li>
+          <li><a href="{{ url_for("blog") }}">Blog</a></li>
           {% if not user %}
             <li><a href="{{ url_for("login") }}">Login</a></li>
           {% else %}
@@ -29,3 +42,4 @@
 	  </div>
 	</div>
   {% block body %}{% endblock %}
+</body>
