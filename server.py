@@ -12,6 +12,10 @@ from flask import session
 from flask import g
 from flask import url_for
 from flask import redirect
+from flask.ext.assets import Environment
+from flask.ext.markdown import Markdown
+from flask.ext.flatpages import FlatPages
+from flask.ext.flatpages import pygments_style_defs
 from flask.ext.github import GitHub
 from flask.ext.sqlalchemy import SQLAlchemy
 
@@ -29,12 +33,24 @@ from sqlalchemy.ext.declarative import declarative_base
 SECRET_KEY = 'development key'
 DEBUG = True
 
+FLATPAGES_AUTO_RELOAD = DEBUG
+FLATPAGES_EXTENSION = ".md"
+PAGE_DATE_FORMAT_STR = "%d-%m-%y"
+DISPLAY_DATE_FORMAT_STR = "%d-%m-%y"
+FREEZER_IGNORE_MIMETYPE_WARNINGS = True
+FREEZER_DEFAULT_MIMETYPE = "text/html"
+
 GITHUB_CLIENT_ID = '5a80a178d27e64a4d264'
 GITHUB_CLIENT_SECRET = '243aa848374960e115494977cada492466f47902s'
 
 
 app = Flask(__name__)
 app.config.from_object(__name__)
+
+
+ASSETS = Environment(app)
+MARKDOWN = Markdown(app)
+PAGES = FlatPages(app)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///github.db'
 
@@ -79,6 +95,15 @@ class User(Base):
     def __init__(self, github_access_token):
         self.github_access_token = github_access_token
 
+
+def get_pages_by_type(page_type):
+    """Gets page path."""
+    page_list = list(PAGES)
+    matches = [source for source in page_list \
+                if source.meta.get('type') == page_type]
+    return matches
+
+
 @app.before_request
 def before_request():
     g.user_id = None
@@ -86,6 +111,7 @@ def before_request():
     if 'user_id' in session:
         g.user_id = User.query.get(session['user_id'])
         g.user_metadata = github.get('user')
+
 
 @app.after_request
 def after_request(response):
@@ -96,6 +122,35 @@ def after_request(response):
 @app.route('/', methods=['GET'])
 def index(name=None):
     return render_template('index.html', user=g.user_metadata)
+
+
+@app.route('/blog')
+def blog():
+    """Renders home page."""
+    post_list = get_pages_by_type('post')
+    latest = sorted(post_list, reverse=True, key=lambda p: p.meta['date'])
+    return render_template('blog.html', user=g.user_metadata, posts=latest[:5])
+
+
+@app.route('/pygments.css')
+def pygments_css():
+    """Renders css."""
+    return pygments_style_defs('tango'), 200, {'Content-Type': 'text/css'}
+
+
+@app.route("/<path:path>/")
+def page(path):
+    """Renders page."""
+    source = PAGES.get_or_404(path)
+    return render_template('page.html', user=g.user_metadata, page=source)
+
+
+@app.route("/")
+def home():
+    """Renders home page."""
+    post_list = get_pages_by_type('post')
+    latest = sorted(post_list, reverse=True, key=lambda p: p.meta['date'])
+    return render_template("index.html", posts=latest[:5])
 
 
 @app.route('/stats', methods=['GET'])
