@@ -6,41 +6,26 @@
   {% block head %} {% endblock %}
 </head>
 <body>
-	<div class=page>
-      <pre>
+  <div class="metanav">
+    <ul>
+      {% if not user %}
+        <li><a href="{{ url_for("login") }}">Login</a></li>
+      {% else %}
+        <li>{{ user['name'] }}</li>
+        <li><a href="{{ url_for("stats") }}">Statistic</a></li>
+        <li><a href="{{ url_for("logout") }}">Logout</a></li>
+      {% endif %}
+    </ul>
+    {% for message in get_flashed_messages() %}
+      <div class=flash>{{ message }}</div>
+    {% endfor %}
+</div>
+<pre>
  _____ _____ _____    _____ _____ _____ _____ _____
 |   __|     |_   _|  |   __|_   _|  _  |_   _|   __|
 |  |  |-   -| | |    |__   | | | |     | | | |__   |
 |_____|_____| |_|    |_____| |_| |__|__| |_| |_____|
 
-      </pre>
-      <div class="metanav">
-        <ul>
-        <!-- <li><a href="{{ url_for("index") }}">Home</a></li> -->
-<!--           <li>
-            Projects
-            <ul>
-              <li><a href="#" >Project1</li>
-              <li><a href="#" >Project2</li>
-            </ul>
-          </li> -->
-          <!-- <li><a href="{{ url_for("blog") }}">Blog</a></li> -->
-          {% if not user %}
-            <li><a href="{{ url_for("login") }}">Login</a></li>
-          {% else %}
-            <li>
-              {{ user['name'] }}
-              <ul>
-                <li><a href="{{ url_for("stats") }}">Statistic</a></li>
-                <li><a href="{{ url_for("logout") }}">Logout</a></li>
-              </ul>
-            </li>
-          {% endif %}
-        </ul>
-        {% for message in get_flashed_messages() %}
-          <div class=flash>{{ message }}</div>
-        {% endfor %}
-	  </div>
-	</div>
-  {% block body %}{% endblock %}
+</pre>
+{% block body %}{% endblock %}
 </body>

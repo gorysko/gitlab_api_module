@@ -1,17 +1,20 @@
 body {
+  margin: 0px;
   font-family: 'Lucida Grande', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  padding: 20px 50px 150px;
   font-size: 13px;
   text-align: center;
   background-image: url('http://drsilkroad.com/wp-content/uploads/sunset-straight-road.jpg');
   background-repeat: no-repeat;
   background-attachment: fixed;
+
 }
+
 
 #user {
   padding: 2em 0em;
   display: block;
 }
+
 
 #user #user-picture {
   border-radius: 10px;
@@ -19,21 +22,16 @@ body {
   height: 14.5em;
 }
 
-#content {
-    width: 80%;
-    height: 60%;
-    min-width: 800px;
-
-    margin-right: auto;
-    margin-left: auto;
-
-    color: #A0D100;
-    text-align: center;
-}
 
 #columnchart_div {
     min-height: 600px;
+    width: 100%;
+    margin: 0px;
+    background-image: url('http://phandroid.s3.amazonaws.com/wp-content/uploads/2014/10/mountains.jpg');
+    /*background-position: 100% 100%;*/
+
 }
+
 
 #donut_div {
     width: 900px;
@@ -48,14 +46,11 @@ body {
 }
 
 .metanav ul {
-  text-align: left;
+  text-align: center;
   display: inline;
-  margin: 0;
+  /*margin: 10px;*/
   padding: 15px 4px 17px 0;
-  list-style: none;
-  -webkit-box-shadow: 0 0 5px rgba(0, 0, 0, 0.15);
-  -moz-box-shadow: 0 0 5px rgba(0, 0, 0, 0.15);
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.15);
+  /*list-style: none;*/
 }
 .metanav ul li {
   font: bold 12px/18px sans-serif;
@@ -79,7 +74,7 @@ body {
   padding: 0;
   /*position: absolute;*/
   top: 48px;
-  /*left: 0;*/  
+  /*left: 0;*/
   /*width: 150px;*/
   text-align: center;
   -webkit-box-shadow: none;
@@ -94,13 +89,13 @@ body {
   -o-transition: opacity 0.2s;
   -transition: opacity 0.2s;
 }
-.metanav ul li ul li { 
-  background: #555; 
-  display: block; 
+.metanav ul li ul li {
+  background: #555;
+  display: block;
   color: #fff;
   text-shadow: 0 -1px 0 #000;
 }
-/*.metanav ul li ul li:hover { 
+/*.metanav ul li ul li:hover {
   background: #666;
 }
 */
@@ -111,12 +106,12 @@ body {
 }
 
 .metanav ul a {
-  text-decoration: none; 
-  color: #000000; 
+  text-decoration: none;
+  color: #000000;
 }
 
 .metanav ul a:hover {
-  text-decoration: none; 
-  color:  #fff; 
+  text-decoration: none;
+  color:  #fff;
 }
 
