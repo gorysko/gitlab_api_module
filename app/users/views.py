@@ -3,30 +3,15 @@
 from json import dumps
 from json import loads
 
-from flask import Flask
 from flask import render_template
-from flask import request
-from flask import session
 from flask import g
 from flask import url_for
 from flask import redirect
-from flask_bootstrap import Bootstrap
-from flask.ext.assets import Environment
-from flask.ext.markdown import Markdown
-from flask.ext.flatpages import FlatPages
-from flask.ext.flatpages import pygments_style_defs
-from flask.ext.github import GitHub
 
-from users import User
+from app import app
+from app import get_pages_by_type
+from app import db_session
 from modules import github as git_wrapper
-
-from app.config import GITHUB_CLIENT_ID
-from app.config import GITHUB_CLIENT_SECRET
-from app.config import GITHUB_BASE_URL
-from app.config import GITHUB_AUTH_URL
-from app.database import engine
-from app.database import Base
-from app.database import db_session
 
 
 @app.route('/blog')
@@ -76,20 +61,6 @@ def stats(name=None):
     return render_template('stats.html', data=data, commits=commits,
                            user=g.user_metadata, total_commits=total_commits,
                            deletions=deletions)
-
-
-@app.route('/login')
-def login():
-    if session.get('user_id', None) is None:
-        return github.authorize()
-    else:
-        return 'Already logged in'
-
-
-@app.route('/logout')
-def logout():
-    session.pop('user_id', None)
-    return redirect(url_for('index'))
 
 
 @app.route('/user')
