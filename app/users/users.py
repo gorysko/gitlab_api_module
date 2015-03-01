@@ -3,7 +3,7 @@ from sqlalchemy import Column
 from sqlalchemy import Integer
 from sqlalchemy import String
 
-from gitlab_api_module import database
+from app import database
 
 class User(database.Base):
     """User class."""

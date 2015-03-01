@@ -1,0 +1,42 @@
+{% extends "layout.html" %}
+{% block head %}
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript">
+      google.load('visualization', '1', {'packages':['corechart']});
+
+      google.setOnLoadCallback(drawChart);
+
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable({{ data|tojson }}, false);
+        var commits = google.visualization.arrayToDataTable({{ commits|tojson }}, false);
+        var deletes = google.visualization.arrayToDataTable({{ deletions|tojson }});
+
+        var columnchart = new google.visualization.BarChart(
+                document.getElementById('columnchart_div'));
+        var donutchart = new google.visualization.PieChart(
+                document.getElementById('donut_div'));
+        var deletionchart = new google.visualization.BarChart(
+                document.getElementById('deletionchart_div'));
+
+        columnchart.draw(data, {vAxis: {baseline: 0}, backgroundColor: { fill:'transparent' }});
+        donutchart.draw(commits, {vAxis: {baseline: 0}, pieHole: 0.4, backgroundColor: { fill:'transparent' }});
+        deletionchart.draw(deletes, {vAxis: {baseline: 0}, backgroundColor: { fill:'transparent' }});
+      }
+    </script>
+{% endblock %}
+{% block body %}
+    {% if user %}
+    	<div id="user" class="{{ 'hidden' if not user }}">
+        	<div id="user-picture-column" class="small-4 columns">
+         		<img id="user-picture" src="{{ user['avatar_url'] if user }}" />
+        	</div>
+      	</div>
+    {% endif %}
+    <h5>Your repos:</h5>
+    <div id="columnchart_div"></div>
+    <span class="label label-success">Total number of commits: {{ total_commits }}</span>
+    <h5>Commits by repo:</h5>
+    <div id="donut_div"></div>
+    <h5>Additions and deletions by repo:</h5>
+    <div id="deletionchart_div"></div>
+ {% endblock %}

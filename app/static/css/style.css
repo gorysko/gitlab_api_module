@@ -1,0 +1,121 @@
+body {
+  margin: 0px;
+  font-family: 'Lucida Grande', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 13px;
+  text-align: center;
+  background-image: url('http://drsilkroad.com/wp-content/uploads/sunset-straight-road.jpg');
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+
+}
+
+
+#user {
+  padding: 2em 0em;
+  display: block;
+}
+
+
+#user #user-picture {
+  border-radius: 10px;
+  width: 14.5em;
+  height: 14.5em;
+}
+
+
+#columnchart_div {
+    min-height: 600px;
+    width: 100%;
+    margin: 0px;
+    /*background-image: url('http://phandroid.s3.amazonaws.com/wp-content/uploads/2014/10/mountains.jpg');*/
+    /*background-position: 100% 100%;*/
+
+}
+
+
+#donut_div {
+    height: 500px;
+    width: 100%;
+    margin: 0px;
+    text-align: center;
+}
+
+#deletionchart_div {
+    height: 500px;
+    width: 100%;
+    margin: 0px;
+    text-align: center;
+    /*background-image: url('http://jmarbach.com/images/bubbles.jpg');*/
+
+}
+
+.metanav ul {
+  text-align: center;
+  display: inline;
+  /*margin: 10px;*/
+  padding: 15px 4px 17px 0;
+  /*list-style: none;*/
+}
+.metanav ul li {
+  font: bold 12px/18px sans-serif;
+  display: inline-block;
+  margin-right: -4px;
+  position: relative;
+  padding: 15px 20px;
+  background: #fff;
+  cursor: pointer;
+  -webkit-transition: all 0.2s;
+  -moz-transition: all 0.2s;
+  -ms-transition: all 0.2s;
+  -o-transition: all 0.2s;
+  transition: all 0.2s;
+}
+.metanav ul li:hover {
+  background: #555;
+  color: #fff;
+}
+.metanav ul li ul {
+  padding: 0;
+  /*position: absolute;*/
+  top: 48px;
+  /*left: 0;*/
+  /*width: 150px;*/
+  text-align: center;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+  display: none;
+  opacity: 0;
+  visibility: hidden;
+  -webkit-transiton: opacity 0.2s;
+  -moz-transition: opacity 0.2s;
+  -ms-transition: opacity 0.2s;
+  -o-transition: opacity 0.2s;
+  -transition: opacity 0.2s;
+}
+.metanav ul li ul li {
+  background: #555;
+  display: block;
+  color: #fff;
+  text-shadow: 0 -1px 0 #000;
+}
+/*.metanav ul li ul li:hover {
+  background: #666;
+}
+*/
+.metanav ul li:hover ul {
+  display: block;
+  opacity: 1;
+  visibility: visible;
+}
+
+.metanav ul a {
+  text-decoration: none;
+  color: #000000;
+}
+
+.metanav ul a:hover {
+  text-decoration: none;
+  color:  #fff;
+}
+
