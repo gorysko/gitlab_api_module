@@ -27,22 +27,26 @@ body {
     min-height: 600px;
     width: 100%;
     margin: 0px;
-    background-image: url('http://phandroid.s3.amazonaws.com/wp-content/uploads/2014/10/mountains.jpg');
+    /*background-image: url('http://phandroid.s3.amazonaws.com/wp-content/uploads/2014/10/mountains.jpg');*/
     /*background-position: 100% 100%;*/
 
 }
 
 
 #donut_div {
-    width: 900px;
     height: 500px;
+    width: 100%;
+    margin: 0px;
     text-align: center;
 }
 
 #deletionchart_div {
-    width: 900px;
     height: 500px;
+    width: 100%;
+    margin: 0px;
     text-align: center;
+    /*background-image: url('http://jmarbach.com/images/bubbles.jpg');*/
+
 }
 
 .metanav ul {
