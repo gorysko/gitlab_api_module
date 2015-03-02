@@ -3,16 +3,21 @@
 from json import dumps
 from json import loads
 
+from flask import Blueprint
 from flask import render_template
-from flask import g
+# from flask import g
 
-from app import app
+from app import g
 from app import get_pages_by_type
 from app import db_session
+from app.config import GITHUB_BASE_URL
+from app.config import GITHUB_CLIENT_SECRET
+from app.config import GITHUB_CLIENT_ID
 from modules import github as git_wrapper
 
+mod = Blueprint('users', __name__)
 
-@app.route('/blog')
+@mod.route('/blog/')
 def blog():
     """Renders home page."""
     post_list = get_pages_by_type('post')
@@ -20,17 +25,17 @@ def blog():
     return render_template('blog.html', user=g.user_metadata, posts=latest[:5])
 
 
-@app.route('/stats/', methods=['GET'])
-def stats():
+@mod.route('/stats/', methods=['GET'])
+def stats(name=None):
     data = [['Type of repos', 'Number of items']]
     commits = [['Repo name', 'Number of commits']]
     deletions = []
     total_commits = 0
 
     if g.user_metadata is not None:
-        git = git_wrapper.GithubApi(app.config['GITHUB_BASE_URL'],
-              g.user_metadata['login'], app.config['GITHUB_CLIENT_ID'],
-              app.config['GITHUB_CLIENT_SECRET'])
+        git = git_wrapper.GithubApi(GITHUB_BASE_URL,
+              g.user_metadata['login'], GITHUB_CLIENT_ID,
+              GITHUB_CLIENT_SECRET)
 
         if g.user_id.repo_commits is not None and \
             g.user_id.user_repo_info is not None and \
@@ -61,6 +66,6 @@ def stats():
                            deletions=deletions)
 
 
-@app.route('/user')
+@mod.route('/user/')
 def user():
     return str(g.user_metada)
