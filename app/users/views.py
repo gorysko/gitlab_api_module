@@ -5,8 +5,6 @@ from json import loads
 
 from flask import render_template
 from flask import g
-from flask import url_for
-from flask import redirect
 
 from app import app
 from app import get_pages_by_type
@@ -22,8 +20,8 @@ def blog():
     return render_template('blog.html', user=g.user_metadata, posts=latest[:5])
 
 
-@app.route('/stats', methods=['GET'])
-def stats(name=None):
+@app.route('/stats/', methods=['GET'])
+def stats():
     data = [['Type of repos', 'Number of items']]
     commits = [['Repo name', 'Number of commits']]
     deletions = []

@@ -4,15 +4,12 @@ from json import dumps
 from json import loads
 
 from flask import Flask
-from flask import flash
 from flask import render_template
 from flask import request
 from flask import session
 from flask import g
 from flask import url_for
 from flask import redirect
-
-from rauth.service import OAuth2Service
 
 from flask_bootstrap import Bootstrap
 from flask.ext.assets import Environment
@@ -28,6 +25,7 @@ from app.config import GITHUB_CLIENT_ID
 from app.config import GITHUB_CLIENT_SECRET
 from app.config import GITHUB_BASE_URL
 from app.config import GITHUB_AUTH_URL
+from app.config import SECRET_KEY
 from app.database import engine
 from app.database import Base
 from app.database import db_session
@@ -48,17 +46,8 @@ app.config['GITHUB_CLIENT_SECRET'] = GITHUB_CLIENT_SECRET
 app.config['GITHUB_BASE_URL'] = GITHUB_BASE_URL
 app.config['GITHUB_AUTH_URL'] = GITHUB_AUTH_URL
 
-github = OAuth2Service(
-    name='github',
-    base_url='https://api.github.com/',
-    access_token_url='https://github.com/login/oauth/access_token',
-    authorize_url='https://github.com/login/oauth/authorize',
-    client_id=GITHUB_CLIENT_ID,
-    client_secret=GITHUB_CLIENT_SECRET,
-)
 
-
-# github = GitHub(app)
+github = GitHub(app)
 
 User = users.User
 
@@ -109,64 +98,39 @@ def page(path):
     return render_template('page.html', user=g.user_metadata, page=source)
 
 
-# @app.route('/github-callback')
-# @github.authorized_handler
-# def authorized(access_token):
-#     # import pdb;pdb.set_trace()
-#     next_url = request.args.get('next') or url_for('index')
-#     if access_token is None:
-#         return redirect(next_url)
-
-#     user = User.query.filter_by(github_access_token=access_token).first()
-#     if user is None:
-#         user = User(access_token)
-#         db_session.add(user)
-#     user.github_access_token = access_token
-#     db_session.commit()
-#     session['user_id'] = user.id
-#     return redirect(url_for('index'))
-
-
 @app.route('/github-callback')
-def authorized():
-    if not 'code' in request.args:
-        flash('You did not authorize the request')
-        return redirect(url_for('index'))
-    redirect_uri = url_for('authorized', _external=True)
-
-    data = dict(code=request.args['code'], redirect_uri=redirect_uri,
-                scope='user:email,public_repo')
-
-    auth = github.get_auth_session(data=data)
-
-    me = auth.get('user').json()
-
-    user = User.get_or_create(me['login'], me['name'])
-
-    session['token'] = auth.access_token
+@github.authorized_handler
+def authorized(access_token):
+    next_url = request.args.get('next') or url_for('index')
+    if access_token is None:
+        return redirect(next_url)
+    user = User.query.filter_by(github_access_token=access_token).first()
+    if user is None:
+        user = User(access_token)
+        db_session.add(user)
+    user.github_access_token = access_token
+    db_session.commit()
     session['user_id'] = user.id
-
-    flash('Logged in as ' + me['name'])
     return redirect(url_for('index'))
 
 
 @app.route('/login/')
 def login():
-    redirect_uri = url_for('authorized', next=request.args.get('next') or
-        request.referrer or None, _external=True)
-    params = {'redirect_uri': redirect_uri, 'scope': 'user:email'}
-    return redirect(github.get_authorize_url(**params))
+    if session.get('user_id', None) is None:
+        return github.authorize()
+    else:
+        return 'Already logged in'
 
 
-# @github.access_token_getter
-# def token_getter():
-#     user_data = g.user_id
-#     if user_data is not None:
-#         return user_data.github_access_token
+@github.access_token_getter
+def token_getter():
+    user_data = g.user_id
+    if user_data is not None:
+        return user_data.github_access_token
 
 
 
-@app.route('/logout')
+@app.route('/logout/')
 def logout():
     session.pop('user_id', None)
     return redirect(url_for('index'))
