@@ -1,12 +1,18 @@
-body {
-  margin: 0px;
-  font-family: 'Lucida Grande', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  font-size: 13px;
-  text-align: center;
-  background-image: url('http://drsilkroad.com/wp-content/uploads/sunset-straight-road.jpg');
-  background-repeat: no-repeat;
-  background-attachment: fixed;
+@import url(http://fonts.googleapis.com/css?family=Underdog&subset=latin,cyrillic);
 
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: rgb(69, 126, 124);
+  font-family: Helvetica, Arial;
+}
+
+.fill-w {
+  width: 100%;
+  min-width: 100%;
 }
 
 
@@ -17,6 +23,7 @@ body {
 
 
 #user #user-picture {
+  display: block;
   border-radius: 10px;
   width: 14.5em;
   height: 14.5em;
@@ -27,9 +34,6 @@ body {
     min-height: 600px;
     width: 100%;
     margin: 0px;
-    /*background-image: url('http://phandroid.s3.amazonaws.com/wp-content/uploads/2014/10/mountains.jpg');*/
-    /*background-position: 100% 100%;*/
-
 }
 
 
@@ -45,19 +49,36 @@ body {
     width: 100%;
     margin: 0px;
     text-align: center;
-    /*background-image: url('http://jmarbach.com/images/bubbles.jpg');*/
+}
 
+img {
+    margin: auto;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+pre {
+  color: red;
+  margin-top: -47%;
+  margin-bottom: 47%;
+  text-align: center;
+}
+
+.metanav {
+  text-align: center;
 }
 
 .metanav ul {
-  text-align: center;
   display: inline;
   /*margin: 10px;*/
   padding: 15px 4px 17px 0;
-  /*list-style: none;*/
 }
+
 .metanav ul li {
   font: bold 12px/18px sans-serif;
+  color: black;
   display: inline-block;
   margin-right: -4px;
   position: relative;
@@ -99,10 +120,8 @@ body {
   color: #fff;
   text-shadow: 0 -1px 0 #000;
 }
-/*.metanav ul li ul li:hover {
-  background: #666;
-}
-*/
+
+
 .metanav ul li:hover ul {
   display: block;
   opacity: 1;
@@ -119,3 +138,63 @@ body {
   color:  #fff;
 }
 
+.page-wrap {
+  width: 66.6%;
+  margin-left: auto;
+  margin-right: auto;
+
+
+  font-size: 15pt;
+  font-size: 2.5vw;
+
+  min-height: 100%;
+
+}
+
+.page-wrap:after {
+  content: "";
+  display: block;
+}
+
+.page-wrap p {
+  text-align: right;
+  color: rgb(58, 42, 17);
+  line-height: 133.3%;
+  font-weight: lighter;
+  margin-top: 1rem;
+  margin-bottom: 2.5rem;
+  max-width: 100%; width: 100%;
+  max-height: 100%;
+}
+
+ .cover-img {
+  image-rendering: pixelated;
+  height: 40em;
+  max-width: 100%; width: 100%;
+
+}
+
+.cover-h1 {
+  margin-top: -25%;
+  margin-bottom: 25%;
+  text-align: center;
+  font-weight: bolder;
+  font-size: 48pt;
+  font-size: 6vw;
+
+  color: rgb(58, 42, 17);
+
+  text-shadow: 6px 6px 0px rgba(0,0,0,0.25);
+
+  text-rendering: optimizeLegibility;
+  font-feature-settings: "kern";
+  -webkit-font-feature-settings: "kern";
+  -moz-font-feature-settings: "kern";
+  -moz-font-feature-settings: "kern=1";
+ }
+
+ .info {
+  display: block;
+  font-size: 3em;
+  text-align: center;
+ }

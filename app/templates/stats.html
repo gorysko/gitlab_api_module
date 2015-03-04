@@ -32,11 +32,32 @@
         	</div>
       	</div>
     {% endif %}
-    <h5>Your repos:</h5>
-    <div id="columnchart_div"></div>
-    <span class="label label-success">Total number of commits: {{ total_commits }}</span>
-    <h5>Commits by repo:</h5>
-    <div id="donut_div"></div>
-    <h5>Additions and deletions by repo:</h5>
-    <div id="deletionchart_div"></div>
+
+    <div class="info">
+        <a href="#repos">#Repos</a>
+        <a href="#commits">#Commits</a>
+        <a href="#additions">#Adds</a>
+    </div>
+    <img src="/static/4.png" class="cover-img">
+    <a name="repos"></a>
+    <h1 class="cover-h1">Your repos:</h1>
+    <section class="page-wrap">
+        <div id="columnchart_div"></div>
+    </section>
+
+    <img src="/static/3.png" class="cover-img">
+    <a name="commits"></a>
+    <h1 class="cover-h1">Commits by repo:</h1>
+    <section class="page-wrap">
+        <p> - Total number of commits: {{ total_commits }}</p>
+        <div id="donut_div"></div>
+    </section>
+
+    <img src="/static/2.png" class="cover-img">
+    <a name="additions"></a>
+    <h1 class="cover-h1">Additions and deletions:</h1>
+    <section class="page-wrap">
+        <div id="deletionchart_div"></div>
+    </section>
+
  {% endblock %}

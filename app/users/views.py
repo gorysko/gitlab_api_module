@@ -5,7 +5,6 @@ from json import loads
 
 from flask import Blueprint
 from flask import render_template
-# from flask import g
 
 from app import g
 from app import get_pages_by_type
@@ -26,7 +25,7 @@ def blog():
 
 
 @mod.route('/stats/', methods=['GET'])
-def stats(name=None):
+def stats():
     data = [['Type of repos', 'Number of items']]
     commits = [['Repo name', 'Number of commits']]
     deletions = []

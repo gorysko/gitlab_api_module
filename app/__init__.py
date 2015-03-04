@@ -29,6 +29,7 @@ from app.config import SECRET_KEY
 from app.database import engine
 from app.database import Base
 from app.database import db_session
+from app.users.views import mod as usersModule
 
 app = Flask(__name__)
 Bootstrap(app)
@@ -45,6 +46,8 @@ app.config['GITHUB_CLIENT_SECRET'] = GITHUB_CLIENT_SECRET
 
 app.config['GITHUB_BASE_URL'] = GITHUB_BASE_URL
 app.config['GITHUB_AUTH_URL'] = GITHUB_AUTH_URL
+
+app.register_blueprint(usersModule)
 
 
 github = GitHub(app)
@@ -67,6 +70,7 @@ def get_pages_by_type(page_type):
 
 @app.before_request
 def before_request():
+    """before request action"""
     g.user_id = None
     g.user_metadata = None
     if 'user_id' in session:
@@ -76,12 +80,14 @@ def before_request():
 
 @app.after_request
 def after_request(response):
+    """after request action"""
     db_session.remove()
     return response
 
 
 @app.route('/', methods=['GET'])
 def index(name=None):
+    """index view of application."""
     return render_template('index.html', user=g.user_metadata)
 
 
@@ -101,9 +107,11 @@ def page(path):
 @app.route('/github-callback')
 @github.authorized_handler
 def authorized(access_token):
+    """github callback processing for auth."""
     next_url = request.args.get('next') or url_for('index')
     if access_token is None:
         return redirect(next_url)
+
     user = User.query.filter_by(github_access_token=access_token).first()
     if user is None:
         user = User(access_token)
@@ -116,54 +124,16 @@ def authorized(access_token):
 
 @app.route('/login/')
 def login():
+    """login action."""
     if session.get('user_id', None) is None:
         return github.authorize()
     else:
         return 'Already logged in'
 
 
-# @app.route('/stats', methods=['GET'])
-# def stats():
-#     data = [['Type of repos', 'Number of items']]
-#     commits = [['Repo name', 'Number of commits']]
-#     deletions = []
-#     total_commits = 0
-
-#     if g.user_metadata is not None:
-#         git = git_wrapper.GithubApi(app.config['GITHUB_BASE_URL'],
-#               g.user_metadata['login'], app.config['GITHUB_CLIENT_ID'],
-#               app.config['GITHUB_CLIENT_SECRET'])
-
-#         if g.user_id.repo_commits is not None and \
-#             g.user_id.user_repo_info is not None and \
-#             g.user_id.deletions is not None:
-
-#             repo_commits = loads(g.user_id.repo_commits)
-#             info = loads(g.user_id.user_repo_info)
-#             deletions = loads(g.user_id.deletions)
-#         else:
-#             repo_commits = git.commits_by_repo()
-#             g.user_id.repo_commits = dumps(repo_commits)
-#             info = git.user_repo_info()
-#             g.user_id.user_repo_info = dumps(info)
-#             deletions = git.get_deletions()
-#             g.user_id.deletions = dumps(deletions)
-
-#         db_session.commit()
-
-#         data.extend([['Repos', len(info[0])],
-#                 ['Forks of user repos', info[1]],
-#                 ['User forked', info[2]]])
-
-#         for repo in repo_commits:
-#             commits.append([repo, repo_commits[repo]])
-#         total_commits = sum([i[1] for i in commits[1:]])
-#     return render_template('stats.html', data=data, commits=commits,
-#                            user=g.user_metadata, total_commits=total_commits,
-#                            deletions=deletions)
-
 @github.access_token_getter
 def token_getter():
+    """gets token."""
     user_data = g.user_id
     if user_data is not None:
         return user_data.github_access_token
@@ -172,9 +142,6 @@ def token_getter():
 
 @app.route('/logout/')
 def logout():
+    """logout action."""
     session.pop('user_id', None)
     return redirect(url_for('index'))
-
-
-from app.users.views import mod as usersModule
-app.register_blueprint(usersModule)
