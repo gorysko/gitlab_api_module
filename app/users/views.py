@@ -26,6 +26,7 @@ def blog():
 
 @mod.route('/stats/', methods=['GET'])
 def stats():
+    """Statistic view."""
     data = [['Type of repos', 'Number of items']]
     commits = [['Repo name', 'Number of commits']]
     deletions = []

@@ -29,7 +29,6 @@ from app.config import SECRET_KEY
 from app.database import engine
 from app.database import Base
 from app.database import db_session
-from app.users.views import mod as usersModule
 
 app = Flask(__name__)
 Bootstrap(app)
@@ -38,21 +37,13 @@ app.config.from_object(__name__)
 ASSETS = Environment(app)
 MARKDOWN = Markdown(app)
 PAGES = FlatPages(app)
-
-
+GITHUB = GitHub(app)
 
 app.config['GITHUB_CLIENT_ID'] = GITHUB_CLIENT_ID
 app.config['GITHUB_CLIENT_SECRET'] = GITHUB_CLIENT_SECRET
-
 app.config['GITHUB_BASE_URL'] = GITHUB_BASE_URL
 app.config['GITHUB_AUTH_URL'] = GITHUB_AUTH_URL
 
-app.register_blueprint(usersModule)
-
-
-github = GitHub(app)
-
-User = users.User
 
 
 def init_db():
@@ -74,8 +65,8 @@ def before_request():
     g.user_id = None
     g.user_metadata = None
     if 'user_id' in session:
-        g.user_id = User.query.get(session['user_id'])
-        g.user_metadata = github.get('user')
+        g.user_id = users.User.query.get(session['user_id'])
+        g.user_metadata = GITHUB.get('user')
 
 
 @app.after_request
@@ -86,7 +77,7 @@ def after_request(response):
 
 
 @app.route('/', methods=['GET'])
-def index(name=None):
+def index():
     """index view of application."""
     return render_template('index.html', user=g.user_metadata)
 
@@ -105,16 +96,16 @@ def page(path):
 
 
 @app.route('/github-callback')
-@github.authorized_handler
+@GITHUB.authorized_handler
 def authorized(access_token):
     """github callback processing for auth."""
     next_url = request.args.get('next') or url_for('index')
     if access_token is None:
         return redirect(next_url)
 
-    user = User.query.filter_by(github_access_token=access_token).first()
+    user = users.User.query.filter_by(github_access_token=access_token).first()
     if user is None:
-        user = User(access_token)
+        user = users.User(access_token)
         db_session.add(user)
     user.github_access_token = access_token
     db_session.commit()
@@ -126,12 +117,12 @@ def authorized(access_token):
 def login():
     """login action."""
     if session.get('user_id', None) is None:
-        return github.authorize()
+        return GITHUB.authorize()
     else:
         return 'Already logged in'
 
 
-@github.access_token_getter
+@GITHUB.access_token_getter
 def token_getter():
     """gets token."""
     user_data = g.user_id
@@ -145,3 +136,7 @@ def logout():
     """logout action."""
     session.pop('user_id', None)
     return redirect(url_for('index'))
+
+
+from app.users.views import mod as usersModule
+app.register_blueprint(usersModule)
