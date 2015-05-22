@@ -9,6 +9,20 @@
 </head>
 <body>
 <section class="logo-wrapper fill-w font">
+  <div class="metanav">
+    <ul>
+      {% if not user %}
+        <a href="{{ url_for('login') }}"><li>Login</li></a>
+      {% else %}
+        <a href="{{ url_for('index') }}"><li>{{ user['name'] }}</li></a>
+        <a href="{{ url_for('users.stats') }}"><li>Statistic</li></a>
+        <a href="{{ url_for('logout') }}"><li>Logout</li></a>
+      {% endif %}
+    </ul>
+    {% for message in get_flashed_messages() %}
+      <div class=flash>{{ message }}</div>
+    {% endfor %}
+  </div>
   <object id="logo" class="fill-w" data="/static/2.png" type="image/png"></object>
   <pre>
  _____ _____ _____    _____ _____ _____ _____ _____
@@ -16,20 +30,7 @@
 |  |  |-   -| | |    |__   | | | |     | | | |__   |
 |_____|_____| |_|    |_____| |_| |__|__| |_| |_____|
   </pre>
-  <div class="metanav">
-    <ul>
-      {% if not user %}
-        <li><a href="{{ url_for('login') }}">Login</a></li>
-      {% else %}
-        <li>{{ user['name'] }}</li>
-        <li><a href="{{ url_for('users.stats') }}">Statistic</a></li>
-        <li><a href="{{ url_for('logout') }}">Logout</a></li>
-      {% endif %}
-    </ul>
-    {% for message in get_flashed_messages() %}
-      <div class=flash>{{ message }}</div>
-    {% endfor %}
-  </div>
+
 </section>
 </div>
 {% block body %}{% endblock %}
