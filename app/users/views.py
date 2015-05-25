@@ -56,7 +56,8 @@ def stats():
 
         data.extend([['Repos', len(info[0])],
                 ['Forks of user repos', info[1]],
-                ['User forked', info[2]]])
+                ['User forked', info[2]],
+                ['Repositories contributed to', info[3]]])
 
         for repo in repo_commits:
             commits.append([repo, repo_commits[repo]])

@@ -19,16 +19,16 @@ class User(Base):
     deletions = Column(String)
 
 
-    def __init__(self, login, username, github_access_token):
+    def __init__(self, github_access_token):
         self.github_access_token = github_access_token
-        self.username = username
-        self.login = login
+        # self.username = username
+        # self.login = login
 
     @staticmethod
-    def get_or_create(login, username, token):
+    def get_or_create(login, token):
         user = User.query.filter_by(login=login).first()
         if user is None:
-            user = User(login, username, token)
+            user = User(token)
             db_session.add(user)
             db_session.commit()
         return user

@@ -112,7 +112,8 @@ class GithubApi(object):
         repos = self.get_user_repos()
         forks = sum([item['forks'] for item in repos])
         owner = sum([item['fork'] for item in repos])
-        return repos, forks, owner
+        contrib = len(self.repos_contributed_to())
+        return repos, forks, owner, contrib
 
     def get_user_repos_names(self):
         """Gets user repos name."""
@@ -133,6 +134,15 @@ class GithubApi(object):
         """Gets user repositories watched."""
         return helper(add_query(urlbuilder(self._url[:-1], 'users',
                                  self._user, 'subscriptions'), self._token))
+
+
+    def repos_contributed_to(self):
+        """Gets not user's repositories"""
+        repos_contr = []
+        for item in self.get_user_repos_watched():
+            if item['owner']['login'] != self._user:
+                repos_contr.append(item)
+        return repos_contr
 
     def get_user_gists(self):
         """Gets user gists."""
