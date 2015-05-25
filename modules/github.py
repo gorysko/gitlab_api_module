@@ -140,7 +140,8 @@ class GithubApi(object):
         """Gets not user's repositories"""
         repos_contr = []
         for item in self.get_user_repos_watched():
-            if item['owner']['login'] != self._user:
+            if item['owner']['login'] != self._user or \
+                            not item['full_name'].startswith(self._user):
                 repos_contr.append(item)
         return repos_contr
 
