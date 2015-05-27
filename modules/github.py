@@ -260,7 +260,19 @@ class GithubApi(object):
             branch: branch name, as string.
         """
         return helper(add_query(urlbuilder(self._url[:-1], 'repos',
-                                 self._user, repo, branch), self._token))
+                                           self._user, repo, 'branches',
+                                           branch), self._token))
+
+    def get_list_of_contr_repo_branches(self, user, repo):
+        """Gets repo branch by branch id.
+
+        Args:
+            user: user name, as string.
+            repo: repo name , as string.
+        """
+        return helper(add_query(urlbuilder(self._url[:-1], 'repos',
+                                           user, repo, 'branches'),
+                                self._token))
 
     def get_repo_collaborator(self, repo, info):
         """Gets repo collaborator.
@@ -311,3 +323,24 @@ class GithubApi(object):
         return helper(add_query(urlbuilder(self._url[:-1], 'repos',
                                  self._user, repo, 'milestone',
                                  iss_id, 'labels'), self._token))
+
+    def get_contrib_repos_branches(self):
+        u = []
+        r = []
+        for item in self.repos_contributed_to():
+            user = item['full_name'].split('/')[0] or item['owner']['login']
+            repo = item['full_name'].split('/')[1] or item['name']
+            u.append(user)
+            r.append(repo)
+            # for i in self.get_list_of_contr_repo_branches(user, repo):
+            #     return helper(add_query(urlbuilder(self._url[:-1], 'repos',
+            #                             user, repo, 'commits',
+            #                             i['commit']['sha']), self._token))
+        return u, r
+
+    def get_contrib_repos_commit(self):
+        commits = []
+        for item in self.get_contrib_repos_branches():
+            if self._user == item['commit']['author']['name']:
+                commits.append(item)
+        return len(commits)
