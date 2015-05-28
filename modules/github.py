@@ -324,23 +324,26 @@ class GithubApi(object):
                                  self._user, repo, 'milestone',
                                  iss_id, 'labels'), self._token))
 
-    def get_contrib_repos_branches(self):
-        u = []
-        r = []
-        for item in self.repos_contributed_to():
-            user = item['full_name'].split('/')[0] or item['owner']['login']
-            repo = item['full_name'].split('/')[1] or item['name']
-            u.append(user)
-            r.append(repo)
-            # for i in self.get_list_of_contr_repo_branches(user, repo):
-            #     return helper(add_query(urlbuilder(self._url[:-1], 'repos',
-            #                             user, repo, 'commits',
-            #                             i['commit']['sha']), self._token))
-        return u, r
+    def get_contrib_repos_sha(self):
+        return [self.get_list_of_contr_repo_branches(item['owner']['login'],
+                                                     item['name']) for item in
+                self.repos_contributed_to()]
 
-    def get_contrib_repos_commit(self):
+    def count_contrib_repos_commits_url(self):
+        url = []
+        for branches in self.get_contrib_repos_sha():
+            for item in branches:
+                url_link = item['commit']['url']
+                url_ = helper(add_query(url_link, self._token))
+                url.append(url_)
+        return url
+
+    def count_contrib_repos_commits_by_user(self):
         commits = []
-        for item in self.get_contrib_repos_branches():
-            if self._user == item['commit']['author']['name']:
-                commits.append(item)
-        return len(commits)
+        for commit in self.count_contrib_repos_commits_url():
+            if commit['commit']['committer']['name'] == self._user:
+                commits.append(commit)
+        if len(commits) > 0:
+            return len(commits)
+        else:
+            return False

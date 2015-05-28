@@ -50,8 +50,12 @@
     <h1 class="cover-h1">Commits by repo:</h1>
     <section class="page-wrap">
         <p> - Total number of commits: {{ total_commits }}</p>
-        <p> - lkjdfhgklsjdhfgkljdsflg {{ contrib_repo_commits }}</p>
         <div id="donut_div"></div>
+        {% if contrib_repo_commits %}
+            <p> - Total number of commits to contributed repositories: {{ contrib_repo_commits }}</p>
+        {% else %}
+            <p> - You didn't commit anything to contributed repositories</p>
+        {% endif %}
     </section>
 
     <img src="/static/2.png" class="cover-img">

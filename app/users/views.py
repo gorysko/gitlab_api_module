@@ -54,7 +54,7 @@ def stats():
             g.user_id.user_repo_info = dumps(info)
             deletions = git.get_deletions()
             g.user_id.deletions = dumps(deletions)
-            contrib_repo_commits = git.get_contrib_repos_branches()
+            contrib_repo_commits = git.count_contrib_repos_commits_by_user()
             g.user_id.contrib_repo_commits = dumps(contrib_repo_commits)
 
         db_session.commit()
