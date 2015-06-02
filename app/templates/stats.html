@@ -56,8 +56,14 @@
         {% else %}
             <p> - You didn't commit anything to contributed repositories</p>
         {% endif %}
+        {% if repos_stargazers > 1 %}
+            <p> - Your repositories have {{ repos_stargazers }} stars</p>
+        {% elif repos_stargazers == 1 %}
+            <p> - Your repositories have only {{ repos_stargazers }} star</p>
+        {% elif repos_stargazers == 0 %}
+            <p> - Your repositories don't have any star</p>
+        {% endif %}
     </section>
-    <p>repos_stargazers {{ repos_stargazers }}</p>
 
     <img src="/static/2.png" class="cover-img">
     <a name="additions"></a>
