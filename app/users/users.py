@@ -18,6 +18,7 @@ class User(Base):
     repo_commits = Column(String)
     deletions = Column(String)
     contrib_repo_commits = Column(String)
+    repos_stargazers = Column(String)
 
 
     def __init__(self, github_access_token):

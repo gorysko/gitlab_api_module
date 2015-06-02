@@ -347,3 +347,22 @@ class GithubApi(object):
             return len(commits)
         else:
             return False
+
+    def get_user_repo_stargazers(self):
+        """Gets url for repo stargazers"""
+        url = []
+        for item in self.get_user_repos():
+            stargazer_url = item['stargazers_url']
+            url_ = helper(add_query(stargazer_url, self._token))
+            url.append(url_)
+        return url
+
+    def get_user_number_of_stargazers(self):
+        """"""
+        stargazers = []
+        for item in self.get_user_repo_stargazers():
+            for i in item:
+                if i['login']:
+                    stargazers.append(i)
+        return len(stargazers)
+
