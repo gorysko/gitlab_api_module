@@ -39,17 +39,22 @@ def stats():
     contrib_repo_commits = 0
     repos_stargazers = 0
 
-    if g.user_metadata is not None:
-        git = git_wrapper.GithubApi(GITHUB_BASE_URL,
-              g.user_metadata['login'], GITHUB_CLIENT_ID,
-              GITHUB_CLIENT_SECRET)
-
+    def git_condition():
         if g.user_id.repo_commits is not None and \
             g.user_id.user_repo_info is not None and \
             g.user_id.deletions is not None and \
             g.user_id.contrib_repo_commits is not None and \
             g.user_id.repos_stargazers is not None:
+            return True
+        else:
+            return False
 
+    if g.user_metadata is not None:
+        git = git_wrapper.GithubApi(GITHUB_BASE_URL,
+              g.user_metadata['login'], GITHUB_CLIENT_ID,
+              GITHUB_CLIENT_SECRET)
+
+        if git_condition():
             repo_commits = loads(g.user_id.repo_commits)
             info = loads(g.user_id.user_repo_info)
             deletions = loads(g.user_id.deletions)
