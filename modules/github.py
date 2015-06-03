@@ -135,13 +135,19 @@ class GithubApi(object):
         return helper(add_query(urlbuilder(self._url[:-1], 'users',
                                  self._user, 'subscriptions'), self._token))
 
+    def valid_cond(self, item):
+        """"""
+        if item['owner']['login'] != self._user\
+                or not item['full_name'].startswith(self._user):
+            return True
+        else:
+            return False
 
     def repos_contributed_to(self):
         """Gets not user's repositories"""
         repos_contr = []
         for item in self.get_user_repos_watched():
-            if item['owner']['login'] != self._user or \
-                            not item['full_name'].startswith(self._user):
+            if self.valid_cond(item):
                 repos_contr.append(item)
         return repos_contr
 
@@ -263,7 +269,7 @@ class GithubApi(object):
                                            self._user, repo, 'branches',
                                            branch), self._token))
 
-    def get_list_of_contr_repo_branches(self, user, repo):
+    def get_contr_repo_branch(self, user, repo):
         """Gets repo branch by branch id.
 
         Args:
@@ -325,8 +331,8 @@ class GithubApi(object):
                                  iss_id, 'labels'), self._token))
 
     def get_contrib_repos_sha(self):
-        return [self.get_list_of_contr_repo_branches(item['owner']['login'],
-                                                     item['name']) for item in
+        return [self.get_contr_repo_branch(item['owner']['login'],
+                                           item['name']) for item in
                 self.repos_contributed_to()]
 
     def count_contrib_repos_commits_url(self):
