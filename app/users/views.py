@@ -4,7 +4,8 @@ from json import dumps
 from json import loads
 
 from flask import Blueprint
-from flask import render_template
+from flask import render_template, flash, redirect
+from flask import Flask
 
 from app import g
 from app import get_pages_by_type
@@ -12,9 +13,13 @@ from app import db_session
 from app.config import GITHUB_BASE_URL
 from app.config import GITHUB_CLIENT_SECRET
 from app.config import GITHUB_CLIENT_ID
+from app.config import OPENID_PROVIDERS
 from modules import github as git_wrapper
+from forms import LoginForm
 
 mod = Blueprint('users', __name__)
+app = Flask(__name__)
+app.config.from_object(__name__)
 
 @mod.route('/blog/')
 def blog():
@@ -58,7 +63,8 @@ def stats():
             deletions = git.get_deletions()
             g.user_id.deletions = dumps(deletions)
             contrib_repo_commits = git.count_contrib_repos_commits_by_user()
-            g.user_id.contrib_repo_commits = dumps(contrib_repo_commits)
+            g.user_id.contrib_repo_commits = \
+                dumps(git.count_contrib_repos_commits_by_user())
             repos_stargazers = git.get_user_number_of_stargazers()
             g.user_id.repos_stargazers = dumps(repos_stargazers)
 
@@ -82,3 +88,14 @@ def stats():
 @mod.route('/user/')
 def user():
     return str(g.user_metada)
+
+
+@mod.route('/login_user/', methods=['GET', 'POST'])
+def login_user():
+    form = LoginForm()
+    if form.validate_on_submit():
+        flash('Login requested for OpenID="' + form.openid.data +
+              '", remember_me=' + str(form.remember_me.data))
+        return redirect('/stats/')
+    return render_template('login_user.html', title='Sign In', form=form,
+                           providers=OPENID_PROVIDERS)
