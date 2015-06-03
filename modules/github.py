@@ -344,9 +344,10 @@ class GithubApi(object):
             if commit['commit']['committer']['name'] == self._user:
                 commits.append(commit)
         if len(commits) > 0:
-            return len(commits)
+            return ' - Total number of commits to contributed repositories: ' +\
+                   str(len(commits))
         else:
-            return False
+            return " - You didn't commit anything to contributed repositories"
 
     def get_user_repo_stargazers(self):
         """Gets url for repo stargazers"""
@@ -364,5 +365,12 @@ class GithubApi(object):
             for i in item:
                 if i['login']:
                     stargazers.append(i)
-        return len(stargazers)
-
+        # return len(stargazers)
+        if (len(stargazers) >= 2):
+            return ' - Your repositories have ' + str(len(stargazers)) +\
+                   ' stars'
+        elif (len(stargazers) == 1):
+             return ' - Your repositories have only ' + str(len(stargazers)) +\
+                    ' star'
+        elif (len(stargazers) == 0):
+            return " - Your repositories don't have any star"

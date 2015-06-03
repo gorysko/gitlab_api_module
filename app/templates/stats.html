@@ -51,18 +51,8 @@
     <section class="page-wrap">
         <p> - Total number of commits: {{ total_commits }}</p>
         <div id="donut_div"></div>
-        {% if contrib_repo_commits %}
-            <p> - Total number of commits to contributed repositories: {{ contrib_repo_commits }}</p>
-        {% else %}
-            <p> - You didn't commit anything to contributed repositories</p>
-        {% endif %}
-        {% if repos_stargazers > 1 %}
-            <p> - Your repositories have {{ repos_stargazers }} stars</p>
-        {% elif repos_stargazers == 1 %}
-            <p> - Your repositories have only {{ repos_stargazers }} star</p>
-        {% elif repos_stargazers == 0 %}
-            <p> - Your repositories don't have any star</p>
-        {% endif %}
+        <p>{{ contrib_repo_commits }}</p>
+        <p>{{ repos_stargazers }}</p>
     </section>
 
     <img src="/static/2.png" class="cover-img">
