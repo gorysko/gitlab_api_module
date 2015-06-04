@@ -365,13 +365,12 @@ class GithubApi(object):
         return url
 
     def get_user_number_of_stargazers(self):
-        """"""
+        """Gets number of the stars for user's repositories"""
         stargazers = []
         for item in self.get_user_repo_stargazers():
             for i in item:
                 if i['login']:
                     stargazers.append(i)
-        # return len(stargazers)
         if (len(stargazers) >= 2):
             return ' - Your repositories have ' + str(len(stargazers)) +\
                    ' stars'
