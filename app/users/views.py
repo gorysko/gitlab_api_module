@@ -13,9 +13,7 @@ from app import db_session
 from app.config import GITHUB_BASE_URL
 from app.config import GITHUB_CLIENT_SECRET
 from app.config import GITHUB_CLIENT_ID
-from app.config import OPENID_PROVIDERS
 from modules import github as git_wrapper
-from forms import LoginForm
 
 mod = Blueprint('users', __name__)
 app = Flask(__name__)
@@ -93,14 +91,3 @@ def stats():
 @mod.route('/user/')
 def user():
     return str(g.user_metada)
-
-
-@mod.route('/login_user/', methods=['GET', 'POST'])
-def login_user():
-    form = LoginForm()
-    if form.validate_on_submit():
-        flash('Login requested for OpenID="' + form.openid.data +
-              '", remember_me=' + str(form.remember_me.data))
-        return redirect('/stats/')
-    return render_template('login_user.html', title='Sign In', form=form,
-                           providers=OPENID_PROVIDERS)

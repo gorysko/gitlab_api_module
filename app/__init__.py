@@ -54,8 +54,8 @@ def init_db():
 def get_pages_by_type(page_type):
     """Gets page path."""
     page_list = list(PAGES)
-    matches = [source for source in page_list \
-                if source.meta.get('type') == page_type]
+    matches = [source for source in page_list
+               if source.meta.get('type') == page_type]
     return matches
 
 
